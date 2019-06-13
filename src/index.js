@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { render } from 'react-dom'
 import Tone from 'tone'
+import { MidiInput } from './MidiInput'
 import './style.css'
 
 const Synth = () => {
@@ -8,6 +9,7 @@ const Synth = () => {
 
   return (
     <div>
+      <MidiInput onMessage={console.warn} />
       <p>Synthetizer goes here :)</p>
     </div>
   )
