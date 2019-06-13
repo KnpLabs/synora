@@ -1,4 +1,5 @@
 import Tone from 'tone'
+import styled from 'styled-components'
 import React, { createContext, useReducer, useEffect } from 'react'
 import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both } from 'ramda'
 
