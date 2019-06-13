@@ -1,25 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { render } from 'react-dom'
-import Tone from 'tone'
+import { SynthInstrument } from './SynthInstrument'
+import { SynthController } from './SynthController'
 import './style.css'
 
-const Synth = () => {
-  useEffect(setupTone, [])
-
-  return (
-    <div>
-      <p>Synthetizer goes here :)</p>
-    </div>
-  )
-}
-
-const setupTone = () => {
-  //create a synth and connect it to the master output (your speakers)
-  var synth = new Tone.Synth().toMaster()
-
-  //play a middle 'C' for the duration of an 8th note
-  synth.triggerAttackRelease('C4', '8n')
-}
+const Synth = () =>
+    <SynthInstrument>
+      <h1>Instrument Ready</h1>
+      <SynthController />
+    </SynthInstrument>
 
 const root = document.getElementById('root')
 
