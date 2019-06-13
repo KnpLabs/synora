@@ -6,6 +6,7 @@ const initialState = {
   notes: [],
   instrument: null,
   volume: 1,
+  waveshape: 'sawtooth'
 }
 
 const reducer = (state = initialState, action) => {
@@ -49,6 +50,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         volume: action.volume,
       }
+    case 'change_waveshape':
+      return {
+        ...state,
+        waveshape: action.waveshape,
+      }
     default:
       return state
   }
@@ -60,7 +66,10 @@ export const SynthInstrument = ({ children }) => {
   const [ state, dispatch ] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    dispatch({ type: 'init_instrument', instrument: new Tone.PolySynth().toMaster() });
+    const instrument = new Tone.PolySynth().toMaster();
+    instrument.set({'oscillator': { 'type': state.waveshape }});
+
+    dispatch({ type: 'init_instrument', instrument: instrument });
   }, [])
 
   useEffect(() => {
@@ -92,6 +101,14 @@ export const SynthInstrument = ({ children }) => {
     const decibels = Tone.gainToDb(state.volume)
     state.instrument.set('volume', decibels)
   }, [state.volume])
+
+  useEffect(() => {
+    if (!state.instrument) {
+      return;
+    }
+
+    state.instrument.set({'oscillator': {'type': state.waveshape}})
+  }, [state.waveshape])
 
   return (
     <SynthInstrumentContext.Provider value={[ state, dispatch ]}>
