@@ -4,7 +4,8 @@ import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both }
 
 const initialState = {
   notes: [],
-  tone: null,
+  instrument: null,
+  volume: 1,
 }
 
 const reducer = (state = initialState, action) => {
@@ -13,8 +14,8 @@ const reducer = (state = initialState, action) => {
   }
 
   switch(action.type) {
-    case 'init_tone':
-      return { ...state, tone: action.tone }
+    case 'init_instrument':
+      return { ...state, instrument: action.instrument }
     case 'note_pressed':
       return {
         ...state,
@@ -43,6 +44,11 @@ const reducer = (state = initialState, action) => {
           compose(assoc('isPlaying', false), assoc('triggered', false)),
         )) (state.notes),
       }
+    case 'change_volume':
+      return {
+        ...state,
+        volume: action.volume,
+      }
     default:
       return state
   }
@@ -54,12 +60,11 @@ export const SynthInstrument = ({ children }) => {
   const [ state, dispatch ] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    //create a synth and connect it to the master output (your speakers)
-    dispatch({ type: 'init_tone', tone: new Tone.PolySynth().toMaster() });
+    dispatch({ type: 'init_instrument', instrument: new Tone.PolySynth().toMaster() });
   }, [])
 
   useEffect(() => {
-    if (!state.tone) {
+    if (!state.instrument) {
       return;
     }
 
@@ -73,15 +78,24 @@ export const SynthInstrument = ({ children }) => {
     const toRelease = filter(propEq('isPlaying', false), state.notes)
     const parseFrequencies = map(({ note }) => Tone.Midi(note).toFrequency())
 
-    state.tone.triggerAttack(parseFrequencies(toPlays))
-    state.tone.triggerRelease(parseFrequencies(toRelease))
+    state.instrument.triggerAttack(parseFrequencies(toPlays))
+    state.instrument.triggerRelease(parseFrequencies(toRelease))
 
     map(({ note }) => dispatch({ type: 'note_triggered', note })) (toPlays)
   }, [state.notes])
 
+  useEffect(() => {
+    if (!state.instrument) {
+      return;
+    }
+
+    const decibels = Tone.gainToDb(state.volume)
+    state.instrument.set('volume', decibels)
+  }, [state.volume])
+
   return (
     <SynthInstrumentContext.Provider value={[ state, dispatch ]}>
-      { state.tone ? children : <p>Loading Instrument ...</p> }
+      { state.instrument ? children : <p>Loading Instrument ...</p> }
     </SynthInstrumentContext.Provider>
   )
 }
