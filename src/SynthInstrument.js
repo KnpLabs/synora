@@ -6,7 +6,13 @@ const initialState = {
   notes: [],
   instrument: null,
   volume: 1,
-  waveshape: 'sawtooth'
+  waveshape: 'sawtooth',
+  pingPongDelay: {
+    engine: null,
+    wet: 1,
+    delayTime: 0.2,
+    feedback: 0.3,
+  },
 }
 
 const reducer = (state = initialState, action) => {
@@ -55,6 +61,22 @@ const reducer = (state = initialState, action) => {
         ...state,
         waveshape: action.waveshape,
       }
+    case 'change_ping_pong_delay':
+      return {
+        ...state,
+        pingPongDelay: {
+          wet: undefined !== action.wet ? action.wet : state.pingPongDelay.wet,
+          feedback: undefined !== action.feedback
+            ? action.feedback
+            : state.pingPongDelay.feedback,
+          delayTime: undefined !== action.delayTime
+            ? action.delayTime
+            : state.pingPongDelay.delayTime,
+          engine: undefined !== action.engine
+            ? action.engine
+            : state.pingPongDelay.engine,
+        }
+      }
     default:
       return state
   }
@@ -66,10 +88,18 @@ export const SynthInstrument = ({ children }) => {
   const [ state, dispatch ] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    const instrument = new Tone.PolySynth().toMaster();
+    const instrument = new Tone.PolySynth()
+
     instrument.set({'oscillator': { 'type': state.waveshape }});
 
-    dispatch({ type: 'init_instrument', instrument: instrument });
+    const pingPongDelay = new Tone.PingPongDelay(state.pingPongDelay.delayTime, state.pingPongDelay.feedback).toMaster();
+
+    pingPongDelay.set('wet', state.pingPongDelay.wet)
+
+    instrument.chain(pingPongDelay)
+
+    dispatch({ type: 'init_instrument', instrument: instrument.toMaster() });
+    dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
   }, [])
 
   useEffect(() => {
