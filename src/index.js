@@ -4,6 +4,7 @@ import { SynthInstrument } from './SynthInstrument'
 import { SynthController } from './SynthController'
 import { Volume } from './Volume'
 import { WaveshapeSelector} from './WaveshapeSelector'
+import { PingPongDelay } from './PingPongDelay'
 import './style.css'
 
 const Synth = () =>
@@ -11,6 +12,7 @@ const Synth = () =>
       <h1>Instrument Ready</h1>
       <Volume />
       <WaveshapeSelector />
+      <PingPongDelay />
       <SynthController />
     </SynthInstrument>
 
