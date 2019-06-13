@@ -2,6 +2,8 @@ import Tone from 'tone'
 import styled from 'styled-components'
 import React, { createContext, useReducer, useEffect } from 'react'
 import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both } from 'ramda'
+import {Meter} from "./Meter";
+import splitAt from "ramda/es/splitAt";
 
 const initialState = {
   notes: [],
@@ -27,6 +29,10 @@ const initialState = {
     delayTime: 0.2,
     feedback: 0.3,
   },
+  meter: {
+      level: 0,
+      engine: null,
+  }
 }
 
 const reducer = (state = initialState, action) => {
@@ -37,6 +43,10 @@ const reducer = (state = initialState, action) => {
   switch(action.type) {
     case 'init_instrument':
       return { ...state, instrument: action.instrument }
+      case 'init_meter':
+      return {...state, meter: { ...state.meter, engine: action.meter } }
+      case 'update_meter':
+          return { ...state, meter: { ...state.meter, level: state.meter.engine.getLevel() } }
     case 'note_pressed':
       return {
         ...state,
@@ -149,7 +159,6 @@ export const SynthInstrument = ({ children }) => {
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
     dispatch({ type: 'set_volume_engine', engine: volume });
   }, [])
-
   useEffect(() => {
     if (!state.instrument) {
       return;
