@@ -5,7 +5,10 @@ import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both }
 const initialState = {
   notes: [],
   instrument: null,
-  volume: 1,
+  volume: {
+    amount: 1,
+    engine: null,
+  },
   waveshape: 'sawtooth',
   pingPongDelay: {
     engine: null,
@@ -51,10 +54,21 @@ const reducer = (state = initialState, action) => {
           compose(assoc('isPlaying', false), assoc('triggered', false)),
         )) (state.notes),
       }
+    case 'set_volume_engine':
+      return {
+        ...state,
+        volume: {
+          ...state.volume,
+          engine: action.engine,
+        }
+      }
     case 'change_volume':
       return {
         ...state,
-        volume: action.volume,
+        volume: {
+          ...state.volume,
+          amount: action.volume,
+        },
       }
     case 'change_waveshape':
       return {
@@ -92,14 +106,16 @@ export const SynthInstrument = ({ children }) => {
 
     instrument.set({'oscillator': { 'type': state.waveshape }});
 
-    const pingPongDelay = new Tone.PingPongDelay(state.pingPongDelay.delayTime, state.pingPongDelay.feedback).toMaster();
+    const pingPongDelay = new Tone.PingPongDelay(state.pingPongDelay.delayTime, state.pingPongDelay.feedback);
+    const volume = new Tone.Volume(state.volume.amount)
 
     pingPongDelay.set('wet', state.pingPongDelay.wet)
 
-    instrument.chain(pingPongDelay)
+    instrument.chain(pingPongDelay, volume, Tone.Master)
 
-    dispatch({ type: 'init_instrument', instrument: instrument.toMaster() });
+    dispatch({ type: 'init_instrument', instrument: instrument });
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
+    dispatch({ type: 'set_volume_engine', engine: volume });
   }, [])
 
   useEffect(() => {
@@ -124,13 +140,13 @@ export const SynthInstrument = ({ children }) => {
   }, [state.notes])
 
   useEffect(() => {
-    if (!state.instrument) {
+    if (!state.instrument || !state.volume.engine) {
       return;
     }
 
-    const decibels = Tone.gainToDb(state.volume)
-    state.instrument.set('volume', decibels)
-  }, [state.volume])
+    const decibels = Tone.gainToDb(state.volume.amount)
+    state.volume.engine.set('volume', decibels)
+  }, [state.volume.amount, state.volume.engine])
 
   useEffect(() => {
     if (!state.instrument) {
