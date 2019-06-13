@@ -25,6 +25,11 @@ export const SynthController = ({ displayControls = true }) => {
 
           const [ type, note, velocity ] = message.data
 
+          if (type === 176 && 3 === note) {
+            dispatch({ type: 'change_volume', volume: velocity / 127 })
+            return;
+          }
+
           if (217 === type) {
             return;
           }
