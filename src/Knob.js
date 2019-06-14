@@ -1,9 +1,7 @@
-import React, { useContext } from 'react'
-import { SynthInstrumentContext } from './SynthInstrument'
+import React from 'react'
 import styled from 'styled-components'
 
 export const Knob = ({label, min, max, value, payload, onChange}) => {
-  const [ state, dispatch ] = useContext(SynthInstrumentContext)
 
   return (
     <div>

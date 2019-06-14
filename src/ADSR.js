@@ -29,7 +29,7 @@ export const ADSR = () => {
         </div>
 
         <div className="Release">
-          <Knob label={'REL'} min={1} max={4000} value={state.envelope.release * 1000} onChange={val => {
+          <Knob label={'Release'} min={1} max={4000} value={state.envelope.release * 1000} onChange={val => {
             dispatch({ type: 'change_envelope', release: val / 1000 })
           }} payload={Math.round(state.envelope.release * 1000) + ' ms'}/>
         </div>
