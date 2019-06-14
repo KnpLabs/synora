@@ -41,15 +41,17 @@ const Key = styled.button`
   display: block;
   border: 1px solid black;
   background-color: ${props => props.active ? 'red' : props.sharp ? 'black' : 'white'};
-  color: ${props => props.sharp ? 'white' : 'black'};
-  margin-left: ${props => props.sharp ? '-15px' : 0};
-  margin-right: ${props => props.sharp ? '-15px' : 0};
+  color: ${props => props.sharp ? '#ddd' : '#333'};
+  margin-left: ${props => props.sharp ? '-1.6%' : 0};
+  margin-right: ${props => props.sharp ? '-1.6%' : 0};
   z-index: ${props => props.sharp ? '1' : 0}
-  min-width: ${props => props.sharp ? '1.8%' : '3.3%'};
-  height: ${props => props.sharp ? '80px' : '140px'};
+  flex: ${props => props.sharp ? '0.9' : '1'};
+  min-width: 1%;
+  height: ${props => props.sharp ? '100px' : '180px'};
   vertical-align: bottom;
   box-shadow: inset 0 3px ${props => props.active ? '15px' : '10px'} ${props => props.sharp ? 'grey' : 'rgba(0, 0, 0, 0.5)'};
   border-radius: 0 0 4px 4px;
-  font-size: 9px;
+  font-size: ${props => props.sharp ? '10px' : '11px'};
+  font-weight: bold;
   line-height: ${props => props.sharp ? '115px' : '230px'};
 `
