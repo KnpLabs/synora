@@ -7,12 +7,15 @@ export const Volume = () => {
 
   return (
     <VolumeKnob>
-      <p>Volume: {Math.round(state.volume.amount * 100)}%</p>
-      <input type="range" min={0} max={100} value={state.volume.amount * 100} onChange={event => {
-        const volume = event.target.value / 100;
+      <p>
+        Volume:
+        <input type="range" min={0} max={100} value={state.volume.amount * 100} onChange={event => {
+          const volume = event.target.value / 100;
 
-        dispatch({ type: 'change_volume', volume })
-      }} />
+          dispatch({ type: 'change_volume', volume })
+        }} />
+        {Math.round(state.volume.amount * 100)}%
+      </p>
     </VolumeKnob>
   )
 }
@@ -32,5 +35,6 @@ const VolumeKnob = styled.div`
 
   & input {
     vertical-align: middle;
+    margin: 0 1em;
   }
 `

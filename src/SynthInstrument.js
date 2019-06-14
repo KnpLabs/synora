@@ -31,7 +31,7 @@ const initialState = {
   },
   meter: {
       level: 0,
-      offset: 30,
+      offset: 70,
       engine: null,
   }
 }

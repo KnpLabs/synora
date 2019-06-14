@@ -40,7 +40,7 @@ const Board = styled.div`
 const Key = styled.button`
   display: block;
   border: 1px solid black;
-  background-color: ${props => props.active ? 'red' : props.sharp ? 'black' : 'white'};
+  background-color: ${props => props.active ? 'orange' : props.sharp ? 'black' : 'white'};
   color: ${props => props.sharp ? '#ddd' : '#333'};
   margin-left: ${props => props.sharp ? '-1.6%' : 0};
   margin-right: ${props => props.sharp ? '-1.6%' : 0};
