@@ -59,12 +59,7 @@ clear: both;
     width: 100%;
   }
   .indicator[value]::-webkit-progress-value  {
-  background-size: cover;
-  background-image:
-    linear-gradient(left,red,green),
-    linear-gradient(right,green);
-
-  border-radius: 2px; 
-  background-size: 35px 20px, 100% 100%, 100% 100%;
+    border-radius: 0px 10px 10px 0px;
+    background-size: 35px 20px, 100% 100%, 100% 100%;
   }
 `
