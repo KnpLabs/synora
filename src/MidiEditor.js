@@ -1,7 +1,7 @@
 import { SynthInstrumentContext } from './SynthInstrument'
 import React, { useContext, useEffect } from 'react'
 import scribble from 'scribbletune'
-import { map, addIndex, repeat, flatten, find, contains, isEmpty, reduce, append, join, splitEvery, replace } from 'ramda';
+import { map, addIndex, repeat, flatten, find, contains, isEmpty, reduce, append, join, splitEvery, replace, toUpper } from 'ramda';
 import styled from 'styled-components'
 
 const notes = [ 'c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b' ]
@@ -46,8 +46,6 @@ export const MidiEditor = () => {
         , '', group)}]`
     , '', splitEvery(8, state.midiEditor.cells)))
 
-    console.warn(notes, pattern)
-
     const clip = scribble.clip({
       instrument: state.instrument,
       notes,
@@ -59,8 +57,17 @@ export const MidiEditor = () => {
 
   return (
     <MidiGrid>
+      <KeyboardColumn>
+        {imap((group, octave) =>
+          map(note =>
+            <Key black={contains('#', note)}>
+              {toUpper(note)}{octave + 2}
+            </Key>
+          , group)
+        , repeat(notes, 4))}
+      </KeyboardColumn>
       {imap((cell, cellIndex) => (
-        <MidiColumn>
+        <MidiColumn endOfMesure={0 !== cellIndex && cellIndex % 8 === 0}>
           {imap((notes, noteIndex) =>
             map(note =>
               <MidiNote
@@ -87,7 +94,7 @@ export const MidiEditor = () => {
 }
 
 const MidiGrid = styled.div`
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: flex;
   flex-direction: row;
@@ -95,14 +102,36 @@ const MidiGrid = styled.div`
 
 const MidiColumn = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
+  flex-grow: 2;
+  ${props => props.endOfMesure
+    ? 'border-left: 1px solid #A88CB7'
+    : ''
+   }
 `
 
 const MidiNote = styled.div`
   height: 10px;
-  width: 20px;
-  border: 1px solid black;
+  min-width: 20px;
+  border: 1px solid #4D4D4D;
   background-color: ${props => props.active ? 'red' : 'transparent'};
 `
 
 const PlayButton = styled.button``
+
+const KeyboardColumn = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
+  background-color: black;
+`
+
+const Key = styled.div`
+  background-color: ${props => props.black ? 'black' : 'white'};
+  height: 10px;
+  min-width: 20px;
+  border: 1px solid #4D4D4D;
+  text-align: center;
+  color: ${props => props.black ? 'white' : 'black'}
+  font-size: 8px;
+  font-weight: bold;
+`
