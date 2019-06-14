@@ -2,6 +2,8 @@ import Tone from 'tone'
 import styled from 'styled-components'
 import React, { createContext, useReducer, useEffect } from 'react'
 import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both } from 'ramda'
+import {Meter} from "./Meter";
+import splitAt from "ramda/es/splitAt";
 
 const initialState = {
   notes: [],
@@ -27,6 +29,11 @@ const initialState = {
     delayTime: 0.2,
     feedback: 0.3,
   },
+  meter: {
+      level: 0,
+      offset: 30,
+      engine: null,
+  }
 }
 
 const reducer = (state = initialState, action) => {
@@ -37,6 +44,12 @@ const reducer = (state = initialState, action) => {
   switch(action.type) {
     case 'init_instrument':
       return { ...state, instrument: action.instrument }
+    case 'init_meter':
+      return {...state, meter: { ...state.meter, engine: action.engine } }
+    case 'update_meter':
+      return { ...state, meter: { ...state.meter, level: parseInt(state.meter.offset) + state.meter.engine.getLevel()} }
+    case 'update_meter_offset':
+        return { ...state, meter: { ...state.meter, offset: action.offset} }
     case 'note_pressed':
       return {
         ...state,
@@ -142,14 +155,16 @@ export const SynthInstrument = ({ children }) => {
     distortion.set('oversampling', '4x');
     pingPongDelay.set('wet', state.pingPongDelay.wet);
 
-    instrument.chain(distortion, pingPongDelay, volume, Tone.Master)
+    const meter = new Tone.Meter();
+    instrument.chain(distortion, pingPongDelay, volume, meter, Tone.Master)
 
     dispatch({ type: 'init_instrument', instrument: instrument });
     dispatch({ type: 'change_distortion', engine: distortion });
+
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
     dispatch({ type: 'set_volume_engine', engine: volume });
+    dispatch({ type: 'init_meter', engine : meter });
   }, [])
-
   useEffect(() => {
     if (!state.instrument) {
       return;
