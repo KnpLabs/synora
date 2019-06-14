@@ -40,6 +40,7 @@ export const MidiEditor = () => {
       ? notes
       : append(join('', cell), notes)
     , [], state.midiEditor.cells)
+
     const pattern = replace(/\[--------\]/g, '-', reduce((pat, group) =>
       `${pat}[${reduce((acc, cell) =>
           isEmpty(cell) ? `${acc}-` : `${acc}x`
