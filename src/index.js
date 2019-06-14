@@ -40,6 +40,7 @@ const Title = styled.h1`
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
   text-transform: uppercase;
   font-style: italic;
+  font-weight: bold;
 `
 
 const EffectRack = styled.div`
@@ -48,9 +49,10 @@ const EffectRack = styled.div`
   > * {
     flex: 1;
     clear: both;
-    border: 1px solid rgba(127, 127, 127, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.5);
     padding: 1em;
     margin-bottom: 1rem;
+    box-shadow: inset 0 -40px 40px rgba(255, 255, 255, 0.05);
 
     p {
       margin: -24px 0 1em 0;
