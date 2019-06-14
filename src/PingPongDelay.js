@@ -28,7 +28,7 @@ export const PingPongDelay = () => {
             dispatch({ type: 'change_ping_pong_delay', wet: newWet })
           }} />
         </div>
-        <div class="time">
+        <div className="time">
           <label htmlFor="ppd-delayTime">Delay Time: {state.pingPongDelay.delayTime}s</label>
           <br />
           <input type="range" min={0} max={100} value={state.pingPongDelay.delayTime * 10} onChange={event => {
