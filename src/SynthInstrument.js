@@ -10,6 +10,12 @@ const initialState = {
     amount: 0.5,
     engine: null,
   },
+  envelope: {
+    attack: 0.01,
+    decay: 0.2,
+    sustain: 1,
+    release: 0.4,
+  },
   waveshape: 'sawtooth',
   distortion: {
     amount: 0,
@@ -74,6 +80,16 @@ const reducer = (state = initialState, action) => {
           ...state.volume,
           amount: action.volume,
         },
+      }
+    case 'change_envelope':
+      return {
+        ...state,
+        envelope: {
+          attack: undefined !== action.attack ? action.attack : state.envelope.attack,
+          decay: undefined !== action.decay ? action.decay : state.envelope.decay,
+          sustain: undefined !== action.sustain ? action.sustain : state.envelope.sustain,
+          release: undefined !== action.release ? action.release : state.envelope.release,
+        }
       }
     case 'change_waveshape':
       return {
@@ -163,6 +179,19 @@ export const SynthInstrument = ({ children }) => {
     const decibels = Tone.gainToDb(state.volume.amount)
     state.volume.engine.set('volume', decibels)
   }, [state.volume.amount, state.volume.engine])
+
+  useEffect(() => {
+    if (!state.instrument) {
+      return;
+    }
+
+    state.instrument.set({'envelope': {
+      'attack': state.envelope.attack,
+      'decay': state.envelope.decay,
+      'sustain': state.envelope.sustain,
+      'release': state.envelope.release
+    }});
+  }, [state.envelope, state.instrument])
 
   useEffect(() => {
     if (!state.instrument) {

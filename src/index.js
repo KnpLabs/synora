@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import { SynthInstrument } from './SynthInstrument'
 import { SynthController } from './SynthController'
 import { Volume } from './Volume'
+import { ADSR } from './ADSR'
 import { Keyboard } from './Keyboard'
 import { WaveshapeSelector} from './WaveshapeSelector'
 import { PingPongDelay } from './PingPongDelay'
@@ -15,6 +16,7 @@ const Synth = () =>
       <Title>Syñora</Title>
       <Volume />
       <WaveshapeSelector />
+      <ADSR />
       <EffectRack>
         <PingPongDelay />
         <Distortion />
