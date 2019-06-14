@@ -52,18 +52,5 @@ export const PingPongDelay = () => {
 }
 
 const DelayEffect = styled.div`
-  clear: both;
-  border: 1px solid rgba(127, 127, 127, 0.6);
-  padding: 1em;
-  margin-bottom: 1rem;
-
-  p {
-    margin: -24px 0 1em 0;
-    padding-left: 1em;
-    background-color: #234760;
-  }
-
-  &>div {
-    display: flex;
-  }
+  flex: 4!important;
 `

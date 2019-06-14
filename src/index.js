@@ -6,6 +6,7 @@ import { Volume } from './Volume'
 import { Keyboard } from './Keyboard'
 import { WaveshapeSelector} from './WaveshapeSelector'
 import { PingPongDelay } from './PingPongDelay'
+import { Distortion } from './Distortion'
 import styled from 'styled-components'
 
 const Synth = () =>
@@ -14,7 +15,10 @@ const Synth = () =>
       <Title>Syñora</Title>
       <Volume />
       <WaveshapeSelector />
-      <PingPongDelay />
+      <EffectRack>
+        <PingPongDelay />
+        <Distortion />
+      </EffectRack>
       <Keyboard />
       <SynthController />
     </SynthInstrument>
@@ -32,6 +36,28 @@ const Title = styled.h1`
   text-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
   text-transform: uppercase;
   font-style: italic;
+`
+
+const EffectRack = styled.div`
+  display: flex;
+
+  > * {
+    flex: 1;
+    clear: both;
+    border: 1px solid rgba(127, 127, 127, 0.6);
+    padding: 1em;
+    margin-bottom: 1rem;
+
+    p {
+      margin: -24px 0 1em 0;
+      padding-left: 1em;
+      background-color: #234760;
+    }
+
+    &>div {
+      display: flex;
+    }
+  }
 `
 
 const root = document.getElementById('root')
