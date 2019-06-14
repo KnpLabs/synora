@@ -31,6 +31,7 @@ const initialState = {
   },
   meter: {
       level: 0,
+      offset: 30,
       engine: null,
   }
 }
@@ -43,14 +44,12 @@ const reducer = (state = initialState, action) => {
   switch(action.type) {
     case 'init_instrument':
       return { ...state, instrument: action.instrument }
-      case 'init_meter':
-      return {...state, meter: { ...state.meter, engine: action.meter } }
-      case 'update_meter':
-          if (state.meter.engine.getLevel() < -30)
-          {
-            return { ...state, meter: { ...state.meter, level: 0 } }
-          }
-          return { ...state, meter: { ...state.meter, level: state.meter.engine.getLevel() } }
+    case 'init_meter':
+      return {...state, meter: { ...state.meter, engine: action.engine } }
+    case 'update_meter':
+      return { ...state, meter: { ...state.meter, level: parseInt(state.meter.offset) + state.meter.engine.getLevel()} }
+    case 'update_meter_offset':
+        return { ...state, meter: { ...state.meter, offset: action.offset} }
     case 'note_pressed':
       return {
         ...state,
@@ -164,7 +163,7 @@ export const SynthInstrument = ({ children }) => {
 
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
     dispatch({ type: 'set_volume_engine', engine: volume });
-    dispatch({ type: 'init_meter', meter : meter });
+    dispatch({ type: 'init_meter', engine : meter });
   }, [])
   useEffect(() => {
     if (!state.instrument) {

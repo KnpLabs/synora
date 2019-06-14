@@ -24,9 +24,10 @@ export const Meter = () => {
     }
     return (
         <MeterLadder>
-            <p>Output : {state.meter ? state.meter.level : 0}</p>
+            <p>Output :</p>
             <div className="screenHolder">
-                    <progress className='indicator' max={100} value={state.meter ? state.meter.level : 0}/>
+                <progress className='indicator' max={100} value={state.meter ? state.meter.level : 0}/>
+                <input type='range' min={-10} max={100} value={state.meter.offset} onChange={event => dispatch({type:'update_meter_offset', offset: event.target.value })}/>
             </div>
         </MeterLadder>
     )
