@@ -50,14 +50,14 @@ clear: both;
   &>div {
     display: flex;
   }
-  .screenHolder {
-    background-color: gray;
-    width:100%;
-  }
   .indicator {
     appearance: none;
     width: 100%;
   }
+  progress::-webkit-progress-bar {
+    background-color:white;
+    border-radius: 0px 10px 10px 0px;
+    }
   .indicator[value]::-webkit-progress-value  {
     border-radius: 0px 10px 10px 0px;
     background-size: 35px 20px, 100% 100%, 100% 100%;
