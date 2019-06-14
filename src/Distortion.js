@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { SynthInstrumentContext } from './SynthInstrument'
+import { Knob } from './Knob'
 import styled from 'styled-components'
 
 export const Distortion = () => {
@@ -18,11 +19,9 @@ export const Distortion = () => {
       <p>Distortion</p>
       <div>
         <div className="amount">
-          <label htmlFor="d-amount">Amount: {Math.round(state.distortion.amount * 100)} %</label>
-          <br />
-          <input type="range" min={0} max={100} value={state.distortion.amount * 100} onChange={event => {
-            dispatch({ type: 'change_distortion', amount: event.target.value / 100 })
-          }} />
+          <Knob label={'Amount'} min={0} max={100} value={state.distortion.amount * 100} onChange={val => {
+            dispatch({ type: 'change_distortion', amount: val / 100 })
+          }} payload={Math.round(state.distortion.amount * 100) + ' %'} />
         </div>
       </div>
     </DistortionEffect>
@@ -31,4 +30,12 @@ export const Distortion = () => {
 
 const DistortionEffect = styled.div`
   flex: 1!important;
+
+  > div {
+    display: flex;
+  }
+  div > div {
+    flex: 1
+    text-align: center;
+  }
 `
