@@ -11,6 +11,10 @@ const initialState = {
     engine: null,
   },
   waveshape: 'sawtooth',
+  distortion: {
+    amount: 0,
+    engine: null,
+  },
   pingPongDelay: {
     engine: null,
     wet: 1,
@@ -92,6 +96,14 @@ const reducer = (state = initialState, action) => {
             : state.pingPongDelay.engine,
         }
       }
+    case 'change_distortion':
+      return {
+        ...state,
+        distortion: {
+          amount: undefined !== action.amount ? action.amount : state.distortion.amount,
+          engine: undefined !== action.engine ? action.engine : state.distortion.engine,
+        }
+      }
     default:
       return state
   }
@@ -107,14 +119,17 @@ export const SynthInstrument = ({ children }) => {
 
     instrument.set({'oscillator': { 'type': state.waveshape }});
 
+    const distortion = new Tone.Distortion(state.distortion.amount);
     const pingPongDelay = new Tone.PingPongDelay(state.pingPongDelay.delayTime, state.pingPongDelay.feedback);
     const volume = new Tone.Volume(state.volume.amount)
 
-    pingPongDelay.set('wet', state.pingPongDelay.wet)
+    distortion.set('oversampling', '4x');
+    pingPongDelay.set('wet', state.pingPongDelay.wet);
 
-    instrument.chain(pingPongDelay, volume, Tone.Master)
+    instrument.chain(distortion, pingPongDelay, volume, Tone.Master)
 
     dispatch({ type: 'init_instrument', instrument: instrument });
+    dispatch({ type: 'change_distortion', engine: distortion });
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
     dispatch({ type: 'set_volume_engine', engine: volume });
   }, [])
