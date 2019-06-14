@@ -10,6 +10,7 @@ import { PingPongDelay } from './PingPongDelay'
 import { Distortion } from './Distortion'
 import styled from 'styled-components'
 import { Meter } from './Meter'
+import { MidiEditor } from './MidiEditor';
 
 const Synth = () =>
   <Wrapper>
@@ -25,6 +26,7 @@ const Synth = () =>
       </EffectRack>
       <Keyboard />
       <SynthController />
+      <MidiEditor />
     </SynthInstrument>
   </Wrapper>
 

@@ -1,9 +1,9 @@
 import Tone from 'tone'
 import styled from 'styled-components'
 import React, { createContext, useReducer, useEffect } from 'react'
-import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both } from 'ramda'
 import {Meter} from "./Meter";
 import splitAt from "ramda/es/splitAt";
+import { append, ifElse, find, when, assoc, propEq, map, compose, filter, both, range, adjust } from 'ramda'
 
 const initialState = {
   notes: [],
@@ -33,6 +33,10 @@ const initialState = {
       level: 0,
       offset: 70,
       engine: null,
+  },
+  midiEditor: {
+    cells: map(x => []) (range(0, 4 * 8)),
+    isPlaying: false,
   }
 }
 
@@ -133,6 +137,56 @@ const reducer = (state = initialState, action) => {
           engine: undefined !== action.engine ? action.engine : state.distortion.engine,
         }
       }
+    case 'add_midi_note':
+      return {
+        ...state,
+        midiEditor: {
+          ...state.midiEditor,
+          cells: adjust(
+            action.cell,
+            append(action.note),
+            state.midiEditor.cells
+          )
+        }
+      }
+    case 'remove_midi_note':
+      return {
+        ...state,
+        midiEditor: {
+          ...state.midiEditor,
+          cells: adjust(
+            action.cell,
+            filter(note => note !== action.note),
+            state.midiEditor.cells,
+          )
+        }
+      }
+    case 'play_midi':
+      return {
+        ...state,
+        midiEditor: {
+          ...state.midiEditor,
+          isPlaying: true,
+        }
+      }
+    case 'stop_midi':
+      return {
+        ...state,
+        midiEditor: {
+          ...state.midiEditor,
+          isPlaying: false,
+        }
+      }
+    case 'start_midi_clip':
+      return {
+        ...state,
+        midiEditor: {
+          ...state.midiEditor,
+          clip: action.clip,
+        }
+      }
+    case 'stop_midi_clip':
+      return state;
     default:
       return state
   }
