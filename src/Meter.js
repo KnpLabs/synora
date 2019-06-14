@@ -1,6 +1,7 @@
 import React, {useContext, useEffect} from 'react'
 import {SynthInstrumentContext} from "./SynthInstrument";
 import styled from "styled-components";
+import {Knob} from "./Knob";
 
 export const Meter = () => {
     const [state, dispatch] = useContext(SynthInstrumentContext)
@@ -25,9 +26,10 @@ export const Meter = () => {
     return (
         <MeterLadder>
             <p>Output :</p>
+            <Knob label={'Offset'} min={-30} max={100} value={state.meter.offset}
+                  onChange={val => {dispatch({type:'update_meter_offset', offset: val })}}/>
             <div className="screenHolder">
                 <progress className='indicator' max={100} value={state.meter ? state.meter.level : 0}/>
-                <input type='range' min={-10} max={100} value={state.meter.offset} onChange={event => dispatch({type:'update_meter_offset', offset: event.target.value })}/>
             </div>
         </MeterLadder>
     )
