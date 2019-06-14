@@ -16,8 +16,8 @@ const Synth = () =>
       <Title>Syñora</Title>
       <Volume />
       <WaveshapeSelector />
-      <ADSR />
       <EffectRack>
+        <ADSR />
         <PingPongDelay />
         <Distortion />
       </EffectRack>

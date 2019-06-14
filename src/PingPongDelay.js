@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { SynthInstrumentContext } from './SynthInstrument'
+import { Knob } from './Knob'
 import styled from 'styled-components'
 
 export const PingPongDelay = () => {
@@ -20,31 +21,21 @@ export const PingPongDelay = () => {
       <p>Ping Pong Delay</p>
       <div>
         <div className="wet">
-          <label htmlFor="ppd-wet">Wet: {Math.round(state.pingPongDelay.wet * 100)} %</label>
-          <br />
-          <input type="range" min={0} max={100} value={state.pingPongDelay.wet * 100} onChange={event => {
-            const newWet = event.target.value / 100
-
-            dispatch({ type: 'change_ping_pong_delay', wet: newWet })
-          }} />
+          <Knob label={'Wet'} min={0} max={100} value={state.pingPongDelay.wet * 100} onChange={val => {
+            dispatch({ type: 'change_ping_pong_delay', wet: val / 100 })
+          }} payload={Math.round(state.pingPongDelay.wet * 100) + ' %'} />
         </div>
+
         <div className="time">
-          <label htmlFor="ppd-delayTime">Delay Time: {state.pingPongDelay.delayTime}s</label>
-          <br />
-          <input type="range" min={0} max={100} value={state.pingPongDelay.delayTime * 10} onChange={event => {
-            const delayTime = event.target.value / 10
-
-            dispatch({ type: 'change_ping_pong_delay', delayTime })
-          }} />
+          <Knob label={'Delay'} min={0} max={100} value={state.pingPongDelay.delayTime * 10} onChange={val => {
+            dispatch({ type: 'change_ping_pong_delay', delayTime: val / 10 })
+          }} payload={state.pingPongDelay.delayTime + ' s'} />
         </div>
-        <div className="feedback">
-          <label htmlFor="ppd-feedback">Feedback: {Math.round(state.pingPongDelay.feedback * 100)} %</label>
-          <br />
-          <input type="range" min={0} max={100} value={state.pingPongDelay.feedback * 100} onChange={event => {
-            const feedback = event.target.value / 100
 
-            dispatch({ type: 'change_ping_pong_delay', feedback })
-          }} />
+        <div className="feedback">
+          <Knob label={'Feedback'} min={0} max={100} value={state.pingPongDelay.feedback * 100} onChange={val => {
+            dispatch({ type: 'change_ping_pong_delay', feedback: val / 100 })
+          }} payload={Math.round(state.pingPongDelay.feedback * 100) + ' %'} />
         </div>
       </div>
     </DelayEffect>
@@ -53,4 +44,13 @@ export const PingPongDelay = () => {
 
 const DelayEffect = styled.div`
   flex: 4!important;
+
+  > div {
+    display: flex;
+  }
+
+  div > div {
+    flex: 1;
+    text-align: center;
+  }
 `
