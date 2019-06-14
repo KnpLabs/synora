@@ -2,6 +2,7 @@ import Tone from 'tone'
 import React, { useContext, useEffect } from 'react'
 import { map } from 'ramda'
 import { SynthInstrumentContext } from './SynthInstrument'
+import styled from 'styled-components'
 
 export const SynthController = ({ displayControls = true }) => {
   const [ state, dispatch ] = useContext(SynthInstrumentContext)
@@ -35,8 +36,6 @@ export const SynthController = ({ displayControls = true }) => {
             return;
           }
 
-          const frequency = Tone.Midi(note).toFrequency()
-
           if (137 === type) {
             dispatch({ type: 'note_released', note: note })
 
@@ -53,10 +52,19 @@ export const SynthController = ({ displayControls = true }) => {
   return !displayControls
     ? null
     : (
-      <div>
+      <Info>
         {map(({ note, isPlaying }) =>
-          isPlaying && <p key={note}>{note}</p>
+          isPlaying && <p key={note}>Played note : {Tone.Midi(note).toNote()}</p>
         ) (state.notes)}
-      </div>
+      </Info>
     )
 }
+
+const Info = styled.div`
+  min-height: 20px;
+  margin-top: 10px;
+
+  & p {
+    margin: 0;
+  }
+`

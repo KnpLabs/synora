@@ -7,7 +7,7 @@ const initialState = {
   notes: [],
   instrument: null,
   volume: {
-    amount: 1,
+    amount: 0.5,
     engine: null,
   },
   waveshape: 'sawtooth',
@@ -158,8 +158,20 @@ export const SynthInstrument = ({ children }) => {
   }, [state.waveshape])
 
   return (
-    <SynthInstrumentContext.Provider value={[ state, dispatch ]}>
-      { state.instrument ? children : <p>Loading Instrument ...</p> }
-    </SynthInstrumentContext.Provider>
-  )
+    <Rack>
+      <SynthInstrumentContext.Provider value={[ state, dispatch ]}>
+        { state.instrument ? children : <p>Loading Instrument ...</p> }
+      </SynthInstrumentContext.Provider>
+    </Rack>
+  );
 }
+
+const Rack = styled.div`
+  overflow: hidden;
+  border: 1px solid gray;
+  padding: 1em;
+  background-color: #234760;
+  color: #eee;
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+`

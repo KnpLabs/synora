@@ -7,12 +7,12 @@ export const WaveshapeSelector = () => {
 
   const waveshapes = ['sine', 'square', 'triangle', 'sawtooth'];
 
-  const items = map(shape => <option value={shape}>{shape}</option>)(waveshapes)
+  const items = map(shape => <option key={shape} value={shape}>{shape}</option>)(waveshapes)
 
   return (
     <div>
       <p>
-        Waveshape :
+        Waveshape:&nbsp;
         <select defaultValue={state.waveshape} onChange={event => {
           const waveshape = event.target.value;
 
