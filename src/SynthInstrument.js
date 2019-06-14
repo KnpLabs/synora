@@ -46,6 +46,10 @@ const reducer = (state = initialState, action) => {
       case 'init_meter':
       return {...state, meter: { ...state.meter, engine: action.meter } }
       case 'update_meter':
+          if (state.meter.engine.getLevel() < -30)
+          {
+            return { ...state, meter: { ...state.meter, level: 0 } }
+          }
           return { ...state, meter: { ...state.meter, level: state.meter.engine.getLevel() } }
     case 'note_pressed':
       return {
@@ -152,12 +156,15 @@ export const SynthInstrument = ({ children }) => {
     distortion.set('oversampling', '4x');
     pingPongDelay.set('wet', state.pingPongDelay.wet);
 
-    instrument.chain(distortion, pingPongDelay, volume, Tone.Master)
+    const meter = new Tone.Meter();
+    instrument.chain(distortion, pingPongDelay, volume, meter, Tone.Master)
 
     dispatch({ type: 'init_instrument', instrument: instrument });
     dispatch({ type: 'change_distortion', engine: distortion });
+
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
     dispatch({ type: 'set_volume_engine', engine: volume });
+    dispatch({ type: 'init_meter', meter : meter });
   }, [])
   useEffect(() => {
     if (!state.instrument) {

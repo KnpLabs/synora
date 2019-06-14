@@ -10,7 +10,6 @@ import { PingPongDelay } from './PingPongDelay'
 import { Distortion } from './Distortion'
 import styled from 'styled-components'
 import { Meter } from './Meter'
-import './style.css'
 
 const Synth = () =>
   <Wrapper>
@@ -22,9 +21,9 @@ const Synth = () =>
         <ADSR />
         <PingPongDelay />
         <Distortion />
+        <Meter />
       </EffectRack>
       <Keyboard />
-      <Meter />
       <SynthController />
     </SynthInstrument>
   </Wrapper>
