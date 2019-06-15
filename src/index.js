@@ -8,8 +8,9 @@ import { Keyboard } from './Keyboard'
 import { WaveshapeSelector} from './WaveshapeSelector'
 import { PingPongDelay } from './PingPongDelay'
 import { Distortion } from './Distortion'
-import styled from 'styled-components'
 import { Meter } from './Meter'
+import { Waveform } from './Waveform'
+import styled from 'styled-components'
 
 const Synth = () =>
   <Wrapper>
@@ -22,6 +23,7 @@ const Synth = () =>
         <PingPongDelay />
         <Distortion />
         <Meter />
+        <Waveform />
       </EffectRack>
       <Keyboard />
       <SynthController />

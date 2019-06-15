@@ -5,13 +5,13 @@ import { SynthInstrumentContext } from './SynthInstrument'
 import styled from 'styled-components'
 
 export const Keyboard = () => {
-  const [ state, dispatch ] = useContext(SynthInstrumentContext)
+  const [ state, dispatch ] = useContext(SynthInstrumentContext);
 
   const isKeyActive = (notes, key) => {
-    const note = find(({note}) => note === key, notes)
+    const note = find(({note}) => note === key, notes);
 
     return note && note.isPlaying;
-  }
+  };
 
   const keys = map(
     (key) => <Key
@@ -23,14 +23,14 @@ export const Keyboard = () => {
       {Tone.Midi(key).toNote()}
     </Key>,
     range(36, 89)
-  )
+  );
 
   return (
     <Board>
       {keys}
     </Board>
   )
-}
+};
 
 const Board = styled.div`
   display: flex;

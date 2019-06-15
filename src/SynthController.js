@@ -55,8 +55,9 @@ export const SynthController = ({ displayControls = true }) => {
     ? null
     : (
       <Info>
+        Played notes :
         {map(({ note, isPlaying }) =>
-          isPlaying && <p key={note}>Played note : {Tone.Midi(note).toNote()}</p>
+          isPlaying && <span key={note}> {Tone.Midi(note).toNote()}</span>
         ) (state.notes)}
       </Info>
     )

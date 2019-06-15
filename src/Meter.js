@@ -24,9 +24,10 @@ export const Meter = () => {
     if (!state.meter) {
         return;
     }
+
     return (
         <MeterLadder>
-            <p>Output :</p>
+            <p>Output</p>
             <div>
               <div className="offset">
                 <Knob label={'Offset'} min={-30} max={100} value={state.meter.offset}
