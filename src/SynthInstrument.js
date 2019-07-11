@@ -7,7 +7,7 @@ const initialState = {
   notes: [],
   instrument: null,
   volume: {
-    amount: 0.5,
+    amount: 0.70,
     engine: null,
   },
   envelope: {
@@ -28,11 +28,15 @@ const initialState = {
     feedback: 0.3,
   },
   meter: {
-      level: 0,
-      offset: 70,
-      engine: null,
+    level: 0,
+    offset: 70,
+    engine: null,
+  },
+  waveform: {
+    values: [],
+    engine: null
   }
-}
+};
 
 const reducer = (state = initialState, action) => {
   if (!action) {
@@ -41,13 +45,17 @@ const reducer = (state = initialState, action) => {
 
   switch(action.type) {
     case 'init_instrument':
-      return { ...state, instrument: action.instrument }
+      return { ...state, instrument: action.instrument };
     case 'init_meter':
-      return {...state, meter: { ...state.meter, engine: action.engine } }
+      return {...state, meter: { ...state.meter, engine: action.engine }};
     case 'update_meter':
-      return { ...state, meter: { ...state.meter, level: parseInt(state.meter.offset) + state.meter.engine.getLevel()} }
+      return { ...state, meter: { ...state.meter, level: parseInt(state.meter.offset) + state.meter.engine.getLevel() }};
     case 'update_meter_offset':
-        return { ...state, meter: { ...state.meter, offset: action.offset} }
+      return { ...state, meter: { ...state.meter, offset: action.offset }};
+    case 'init_waveform':
+      return {...state, waveform: { ...state.waveform, engine: action.engine }};
+    case 'update_waveform':
+      return {...state, waveform: { ...state.waveform, values: state.waveform.engine.getValue() }};
     case 'note_pressed':
       return {
         ...state,
@@ -136,25 +144,27 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export const SynthInstrumentContext = createContext([ initialState, () => null ])
+export const SynthInstrumentContext = createContext([ initialState, () => null ]);
 
 export const SynthInstrument = ({ children }) => {
-  const [ state, dispatch ] = useReducer(reducer, initialState)
+  const [ state, dispatch ] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const instrument = new Tone.PolySynth()
+    const instrument = new Tone.PolySynth();
 
     instrument.set({'oscillator': { 'type': state.waveshape }});
 
     const distortion = new Tone.Distortion(state.distortion.amount);
     const pingPongDelay = new Tone.PingPongDelay(state.pingPongDelay.delayTime, state.pingPongDelay.feedback);
-    const volume = new Tone.Volume(state.volume.amount)
+    const volume = new Tone.Volume(state.volume.amount);
 
     distortion.set('oversampling', '4x');
     pingPongDelay.set('wet', state.pingPongDelay.wet);
 
     const meter = new Tone.Meter();
-    instrument.chain(distortion, pingPongDelay, volume, meter, Tone.Master)
+    const waveform = new Tone.Waveform(128);
+    instrument.chain(distortion, pingPongDelay, volume, meter, waveform, Tone.Master);
+
 
     dispatch({ type: 'init_instrument', instrument: instrument });
     dispatch({ type: 'change_distortion', engine: distortion });
@@ -162,7 +172,9 @@ export const SynthInstrument = ({ children }) => {
     dispatch({ type: 'change_ping_pong_delay', engine: pingPongDelay });
     dispatch({ type: 'set_volume_engine', engine: volume });
     dispatch({ type: 'init_meter', engine : meter });
-  }, [])
+    dispatch({ type: 'init_waveform', engine: waveform });
+  }, []);
+
   useEffect(() => {
     if (!state.instrument) {
       return;
@@ -174,24 +186,24 @@ export const SynthInstrument = ({ children }) => {
         propEq('triggered', false),
      ),
      state.notes
-    )
-    const toRelease = filter(propEq('isPlaying', false), state.notes)
-    const parseFrequencies = map(({ note }) => Tone.Midi(note).toFrequency())
+    );
+    const toRelease = filter(propEq('isPlaying', false), state.notes);
+    const parseFrequencies = map(({ note }) => Tone.Midi(note).toFrequency());
 
-    state.instrument.triggerAttack(parseFrequencies(toPlays))
-    state.instrument.triggerRelease(parseFrequencies(toRelease))
+    state.instrument.triggerAttack(parseFrequencies(toPlays));
+    state.instrument.triggerRelease(parseFrequencies(toRelease));
 
     map(({ note }) => dispatch({ type: 'note_triggered', note })) (toPlays)
-  }, [state.notes])
+  }, [state.notes]);
 
   useEffect(() => {
     if (!state.instrument || !state.volume.engine) {
       return;
     }
 
-    const decibels = Tone.gainToDb(state.volume.amount)
+    const decibels = Tone.gainToDb(state.volume.amount);
     state.volume.engine.set('volume', decibels)
-  }, [state.volume.amount, state.volume.engine])
+  }, [state.volume.amount, state.volume.engine]);
 
   useEffect(() => {
     if (!state.instrument) {
@@ -204,7 +216,7 @@ export const SynthInstrument = ({ children }) => {
       'sustain': state.envelope.sustain,
       'release': state.envelope.release
     }});
-  }, [state.envelope, state.instrument])
+  }, [state.envelope, state.instrument]);
 
   useEffect(() => {
     if (!state.instrument) {
@@ -212,7 +224,7 @@ export const SynthInstrument = ({ children }) => {
     }
 
     state.instrument.set({'oscillator': {'type': state.waveshape}})
-  }, [state.waveshape])
+  }, [state.waveshape]);
 
   return (
     <Rack>
@@ -221,7 +233,7 @@ export const SynthInstrument = ({ children }) => {
       </SynthInstrumentContext.Provider>
     </Rack>
   );
-}
+};
 
 const Rack = styled.div`
   overflow: hidden;
@@ -231,4 +243,4 @@ const Rack = styled.div`
   color: #eee;
   box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.2), 0 0 8px rgba(0, 0, 0, 0.2);
   border-radius: 4px;
-`
+`;
