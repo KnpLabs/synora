@@ -6,18 +6,6 @@ export const FLT_FREQ_MAX = 16000
 export const initialState = {
   notes: [],
   initialized: false,
-  engine: {
-    oscillator1: null,
-    oscillator2: null,
-    filter: {
-      unit: null,
-      envelope: null,
-    },
-    volume: null,
-    distortion: null,
-    delay: null,
-    analyzer: null,
-  },
   parameters: {
     master_vol: 0.7, // [0;1] gain
 
@@ -57,6 +45,7 @@ export const initialState = {
     dist_amt: 0, // [0;1] unitless
   },
   analyzer: {
+    requesting: false,
     values: [],
   }
 }
@@ -68,10 +57,13 @@ export const reducer = (state = initialState, action) => {
 
   switch (action.type) {
     case 'init_engine':
-      return { ...state, engine: action.engine, initialized: true }
+      return { ...state, initialized: true }
 
     case 'update_analyzer':
-      return { ...state, analyzer: { values: state.engine.analyzer.getValue() } }
+      return { ...state, analyzer: { ...state.analyzer, requesting: true }}
+
+    case 'set_analyzer':
+      return { ...state, analyzer: { requesting: false, values: action.values } }
 
     case 'note_pressed':
       return {

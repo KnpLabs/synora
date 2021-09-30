@@ -18,7 +18,7 @@ const Synth = () =>
       <Engine>
         <Header>
           <Title>|| Syñora</Title>
-          <Analyzer/>
+          {/*<Analyzer/>*/}
           <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
         </Header>
         <Rack>

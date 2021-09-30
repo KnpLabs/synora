@@ -4,11 +4,24 @@ import React, { createContext, useReducer, useEffect } from 'react'
 import { propEq, map, filter, both } from 'ramda'
 import { FLT_FREQ_MAX, FLT_FREQ_MIN, getParams, initialState, reducer } from '../state'
 
+let engine = {
+  oscillator1: null,
+  oscillator2: null,
+  filter: {
+    unit: null,
+    envelope: null,
+  },
+  volume: null,
+  distortion: null,
+  delay: null,
+  analyzer: null,
+}
+
 export const SynthInstrumentContext = createContext([initialState, () => null])
 
 export const Engine = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { engine, initialized } = state
+  const { initialized } = state
   const params = getParams(state)
 
   useEffect(() => {
@@ -16,8 +29,8 @@ export const Engine = ({ children }) => {
     const oscillator1 = new Tone.PolySynth()
     const oscillator2 = new Tone.PolySynth()
     const filter = new Tone.Filter(defaults.flt_freq, defaults.flt_type, -24)
-    const filterEnvelope = new Tone.Envelope();
-    const filterFreqScale = new Tone.Scale(FLT_FREQ_MIN, FLT_FREQ_MAX);
+    const filterEnvelope = new Tone.Envelope()
+    const filterFreqScale = new Tone.Scale(FLT_FREQ_MIN, FLT_FREQ_MAX)
     const distortion = new Tone.Distortion(defaults.dist_amt)
     const delay = new Tone.FeedbackDelay(defaults.delay_time, defaults.delay_feed)
     const volume = new Tone.Volume(defaults.master_vol)
@@ -35,11 +48,8 @@ export const Engine = ({ children }) => {
 
     filter.chain(distortion, delay, analyzer, volume, Tone.Destination)
 
-    Tone.start()
-
-    dispatch({
-      type: 'init_engine',
-      engine: {
+    Tone.start().then(() => {
+      engine = {
         oscillator1,
         oscillator2,
         filter: {
@@ -52,8 +62,21 @@ export const Engine = ({ children }) => {
         delay,
         analyzer
       }
+
+      dispatch({ type: 'init_engine' })
     })
   }, [])
+
+  useEffect(() => {
+    if (!initialized) {
+      return
+    }
+
+    if (state.analyzer.requesting) {
+      dispatch({ type: 'set_analyzer', values: engine.analyzer.getValue()})
+    }
+
+  }, [initialized, engine, dispatch, state.analyzer])
 
   useEffect(() => {
     if (!initialized) {
@@ -161,11 +184,11 @@ export const Engine = ({ children }) => {
     }
 
     if (params.flt_env_mix > 0) {
-      engine.filter.scale.min = params.flt_freq;
-      engine.filter.scale.max = params.flt_freq + (FLT_FREQ_MAX - params.flt_freq) * params.flt_env_mix;
+      engine.filter.scale.min = params.flt_freq
+      engine.filter.scale.max = params.flt_freq + (FLT_FREQ_MAX - params.flt_freq) * params.flt_env_mix
     } else {
       engine.filter.scale.min = FLT_FREQ_MIN + (params.flt_freq - FLT_FREQ_MIN) * (1 - Math.abs(params.flt_env_mix))
-      engine.filter.scale.max = params.flt_freq;
+      engine.filter.scale.max = params.flt_freq
     }
 
   }, [params.flt_env_mix, params.flt_freq, engine, initialized])
