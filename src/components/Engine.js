@@ -1,7 +1,6 @@
 import * as Tone from 'tone'
 import styled from 'styled-components'
 import React, { createContext, useReducer, useEffect } from 'react'
-import { propEq, map, filter, both } from 'ramda'
 import { FLT_FREQ_MAX, FLT_FREQ_MIN, getParams, initialState, reducer } from '../state'
 
 let engine = {
@@ -65,7 +64,7 @@ export const Engine = ({ children }) => {
         analyzer,
         reverb
       }
-
+            
       dispatch({ type: 'init_engine' })
     })
   }, [])
@@ -86,25 +85,28 @@ export const Engine = ({ children }) => {
       return
     }
 
-    const toPlays = filter(
-      both(
-        propEq('isPlaying', true),
-        propEq('triggered', false),
-      ),
-      state.notes
-    )
-    const toRelease = filter(propEq('isPlaying', false), state.notes)
-    const parseFrequencies = map(({ note }) => Tone.Midi(note).toFrequency())
+    const toPlays = state.notes.filter(note => note.isPlaying && !note.triggered)
+   
+    const toRelease = state.notes.filter(note => !note.isPlaying)
 
-    engine.oscillator1.triggerAttack(parseFrequencies(toPlays))
-    engine.oscillator2.triggerAttack(parseFrequencies(toPlays))
+    const parseFrequencies = (notes) => notes.map(({ note }) => Tone.Midi(note).toFrequency())
+
+    toPlays.forEach(note => {
+      engine.oscillator1.triggerAttack(
+        Tone.Midi(note.note).toFrequency(), Tone.now(), note.velocity
+    )})
+
+    toPlays.forEach(note => engine.oscillator2.triggerAttack(
+      Tone.Midi(note.note).toFrequency(), Tone.now(), note.velocity
+    ))
+
     engine.filter.envelope.triggerAttack()
 
     engine.oscillator1.triggerRelease(parseFrequencies(toRelease))
     engine.oscillator2.triggerRelease(parseFrequencies(toRelease))
     engine.filter.envelope.triggerRelease()
 
-    map(({ note }) => dispatch({ type: 'note_triggered', note }))(toPlays)
+    toPlays.map(({ note }) => dispatch({ type: 'note_triggered', note }))
   }, [state.notes, dispatch, initialized])
 
   useEffect(() => {

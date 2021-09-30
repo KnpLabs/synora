@@ -1,4 +1,3 @@
-import { append, assoc, compose, find, ifElse, map, propEq, when } from 'ramda'
 
 export const FLT_FREQ_MIN = 20
 export const FLT_FREQ_MAX = 16000
@@ -71,32 +70,36 @@ export const reducer = (state = initialState, action) => {
     case 'note_pressed':
       return {
         ...state,
-        notes: ifElse(
-          find(propEq('note', action.note)),
-          map(when(
-            propEq('note', action.note),
-            compose(assoc('isPlaying', true), assoc('triggered', false)),
-          )),
-          append({ note: action.note, isPlaying: true, triggered: false }),
-        )(state.notes),
+        notes:
+          state.notes.find(note => note.note ===  action.note)
+            ? state.notes.map(n => (
+              n.note === action.note
+                ? { ...n, isPlaying: true, triggered: false, velocity: action.velocity }
+                : n
+            ))
+            : [ ...state.notes, { note: action.note, isPlaying: true, triggered: false, velocity: action.velocity }]
       }
-
+    
     case 'note_triggered':
       return {
         ...state,
-        notes: map(when(
-          propEq('note', action.note),
-          assoc('triggered', true),
-        ))(state.notes),
+        notes:
+          state.notes.map(n => (
+            n.note === action.note
+              ? { ...n, triggered: true }
+              : n
+          ))
       }
 
     case 'note_released':
       return {
         ...state,
-        notes: map(when(
-          propEq('note', action.note),
-          compose(assoc('isPlaying', false), assoc('triggered', false)),
-        ))(state.notes),
+        notes:
+          state.notes.map(n => (
+            n.note === action.note
+              ? { ...n, isPlaying: false, triggered: false }
+              : n
+          ))
       }
 
     case 'set_parameter':
