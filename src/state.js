@@ -49,6 +49,10 @@ export const initialState = {
   analyzer: {
     requesting: false,
     values: [],
+  },
+  midi: {
+    device: null,
+    devices: []
   }
 }
 
@@ -60,6 +64,35 @@ export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'init_engine':
       return { ...state, initialized: true }
+
+    case 'midi_device_connect':
+      return {
+        ...state,
+        midi: {
+          ...state.midi,
+          devices: state.midi.devices.find(device => device.id.toString() === action.device.id.toString()) !== undefined
+            ? state.midi.devices
+            : [...state.midi.devices, action.device]
+        }
+      }
+
+    case 'midi_device_disconnect':
+      return {
+        ...state,
+        midi: {
+          ...state.midi,
+          devices: state.midi.devices.filter(device => device.id !== action.device.id)
+        }
+      }
+
+    case 'midi_switch_device':
+      return {
+        ...state,
+        midi: {
+          ...state.midi,
+          device: action.device
+        }
+      }
 
     case 'update_analyzer':
       return { ...state, analyzer: { ...state.analyzer, requesting: true }}
@@ -79,7 +112,7 @@ export const reducer = (state = initialState, action) => {
             ))
             : [ ...state.notes, { note: action.note, isPlaying: true, triggered: false, velocity: action.velocity }]
       }
-    
+
     case 'note_triggered':
       return {
         ...state,
@@ -119,6 +152,8 @@ export const reducer = (state = initialState, action) => {
 /* Selectors */
 export const getParams = state => state.parameters
 export const getParam = (state, name) => getParams(state)[name] || null
+export const getMIDIDevices = (state) => state.midi.devices
+export const getMIDIDevice = (state) => state.midi.device
 
 /* Dispatch helpers */
 export const setParam = (dispatch, name, value) => dispatch({ type: 'set_parameter', name, value })

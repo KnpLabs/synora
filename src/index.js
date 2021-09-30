@@ -10,6 +10,7 @@ import { Keyboard } from './components/Keyboard'
 import { Delay } from './components/Delay'
 import { Distortion } from './components/Distortion'
 import { Analyzer } from './components/Analyzer'
+import { DeviceSelector } from './components/DeviceSelector'
 import styled, { ThemeProvider } from 'styled-components'
 import theme from './theme'
 
@@ -19,7 +20,8 @@ const Synth = () =>
       <Engine>
         <Header>
           <Title>|| Syñora</Title>
-          {/*<Analyzer/>*/}
+          <DeviceSelector/>
+          <Analyzer/>
           <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
         </Header>
         <Rack>
