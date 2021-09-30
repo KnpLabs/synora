@@ -14,7 +14,7 @@ export const Delay = () => (
 )
 
 const DelayEffect = styled.div`
-  flex: 3!important;
+  flex: 2!important;
 
   > div {
     display: flex;

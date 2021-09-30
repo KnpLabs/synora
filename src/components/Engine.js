@@ -15,6 +15,7 @@ let engine = {
   distortion: null,
   delay: null,
   analyzer: null,
+  reverb: null,
 }
 
 export const SynthInstrumentContext = createContext([initialState, () => null])
@@ -34,6 +35,7 @@ export const Engine = ({ children }) => {
     const distortion = new Tone.Distortion(defaults.dist_amt)
     const delay = new Tone.FeedbackDelay(defaults.delay_time, defaults.delay_feed)
     const volume = new Tone.Volume(defaults.master_vol)
+    const reverb = new Tone.Reverb(defaults.verb_time)
     const analyzer = new Tone.Analyser('fft', 128)
 
     oscillator1.set({ 'oscillator': { 'type': defaults.osc1_type } })
@@ -46,7 +48,7 @@ export const Engine = ({ children }) => {
     oscillator1.connect(filter)
     oscillator2.connect(filter)
 
-    filter.chain(distortion, delay, analyzer, volume, Tone.Destination)
+    filter.chain(delay, distortion, reverb, analyzer, volume, Tone.Destination)
 
     Tone.start().then(() => {
       engine = {
@@ -60,7 +62,8 @@ export const Engine = ({ children }) => {
         volume,
         distortion,
         delay,
-        analyzer
+        analyzer,
+        reverb
       }
 
       dispatch({ type: 'init_engine' })
@@ -73,10 +76,10 @@ export const Engine = ({ children }) => {
     }
 
     if (state.analyzer.requesting) {
-      dispatch({ type: 'set_analyzer', values: engine.analyzer.getValue()})
+      dispatch({ type: 'set_analyzer', values: engine.analyzer.getValue() })
     }
 
-  }, [initialized, engine, dispatch, state.analyzer])
+  }, [initialized, dispatch, state.analyzer])
 
   useEffect(() => {
     if (!initialized) {
@@ -102,7 +105,7 @@ export const Engine = ({ children }) => {
     engine.filter.envelope.triggerRelease()
 
     map(({ note }) => dispatch({ type: 'note_triggered', note }))(toPlays)
-  }, [state.notes, dispatch, engine, initialized])
+  }, [state.notes, dispatch, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -111,7 +114,7 @@ export const Engine = ({ children }) => {
 
     const decibels = Tone.gainToDb(params.master_vol)
     engine.volume.set({ 'volume': decibels })
-  }, [params.master_vol, engine, initialized])
+  }, [params.master_vol, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -143,7 +146,6 @@ export const Engine = ({ children }) => {
     params.osc2_env_dec,
     params.osc2_env_sus,
     params.osc2_env_rel,
-    engine,
     initialized
   ])
 
@@ -159,7 +161,7 @@ export const Engine = ({ children }) => {
       'release': params.flt_env_rel
     })
 
-  }, [params.flt_env_atk, params.flt_env_dec, params.flt_env_sus, params.flt_env_rel, engine, initialized])
+  }, [params.flt_env_atk, params.flt_env_dec, params.flt_env_sus, params.flt_env_rel, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -168,7 +170,7 @@ export const Engine = ({ children }) => {
 
     engine.oscillator1.set({ 'oscillator': { 'type': params.osc1_type } })
     engine.oscillator2.set({ 'oscillator': { 'type': params.osc2_type } })
-  }, [params.osc1_type, params.osc2_type, engine, initialized])
+  }, [params.osc1_type, params.osc2_type, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -176,7 +178,7 @@ export const Engine = ({ children }) => {
     }
 
     engine.filter.unit.set({ 'type': params.flt_type })
-  }, [params.flt_type, params.flt_freq, params.flt_res, engine, initialized])
+  }, [params.flt_type, params.flt_freq, params.flt_res, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -191,7 +193,7 @@ export const Engine = ({ children }) => {
       engine.filter.scale.max = params.flt_freq
     }
 
-  }, [params.flt_env_mix, params.flt_freq, engine, initialized])
+  }, [params.flt_env_mix, params.flt_freq, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -200,7 +202,7 @@ export const Engine = ({ children }) => {
 
     engine.oscillator1.set({ 'oscillator': { 'detune': params.osc1_detune + params.osc1_pitch * 100 } })
     engine.oscillator2.set({ 'oscillator': { 'detune': params.osc2_detune + params.osc2_pitch * 100 } })
-  }, [params.osc1_detune, params.osc1_pitch, params.osc2_detune, params.osc2_pitch, engine, initialized])
+  }, [params.osc1_detune, params.osc1_pitch, params.osc2_detune, params.osc2_pitch, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -209,7 +211,7 @@ export const Engine = ({ children }) => {
 
     engine.oscillator1.set({ 'oscillator': { 'volume': Tone.gainToDb(params.osc1_vol) } })
     engine.oscillator2.set({ 'oscillator': { 'volume': Tone.gainToDb(params.osc2_vol) } })
-  }, [params.osc1_vol, params.osc2_vol, engine, initialized])
+  }, [params.osc1_vol, params.osc2_vol, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -218,7 +220,7 @@ export const Engine = ({ children }) => {
 
     engine.oscillator1.set({ 'oscillator': { 'phase': params.osc1_phase } })
     engine.oscillator2.set({ 'oscillator': { 'phase': params.osc2_phase } })
-  }, [params.osc1_phase, params.osc2_phase, engine, initialized])
+  }, [params.osc1_phase, params.osc2_phase, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -226,7 +228,7 @@ export const Engine = ({ children }) => {
     }
 
     engine.distortion.set({ 'distortion': params.dist_amt })
-  }, [params.dist_amt, engine, initialized])
+  }, [params.dist_amt, initialized])
 
   useEffect(() => {
     if (!initialized) {
@@ -236,7 +238,16 @@ export const Engine = ({ children }) => {
     engine.delay.set({ 'wet': params.delay_wet })
     engine.delay.set({ 'delayTime': params.delay_time })
     engine.delay.set({ 'feedback': params.delay_feed })
-  }, [params.delay_wet, params.delay_time, params.delay_feed, engine, initialized])
+  }, [params.delay_wet, params.delay_time, params.delay_feed, initialized])
+
+  useEffect(() => {
+    if (!initialized) {
+      return
+    }
+
+    engine.reverb.set({ 'wet': params.verb_wet })
+    engine.reverb.set({ 'decay': params.verb_time })
+  }, [params.verb_wet, params.verb_time, initialized])
 
   return (
     <Rack>

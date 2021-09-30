@@ -4,6 +4,7 @@ import { Engine } from './components/Engine'
 import { Filter } from './components/Filter'
 import { Oscillator } from './components/Oscillator'
 import { ParamKnob } from './components/ParamKnob'
+import { Reverb } from './components/Reverb'
 import { SynthController } from './components/SynthController'
 import { Keyboard } from './components/Keyboard'
 import { Delay } from './components/Delay'
@@ -29,6 +30,7 @@ const Synth = () =>
         <Rack>
           <Delay/>
           <Distortion/>
+          <Reverb/>
         </Rack>
         <Keyboard/>
         <SynthController/>

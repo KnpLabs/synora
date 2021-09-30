@@ -42,6 +42,9 @@ export const initialState = {
     delay_time: 0, // [O;10] sec
     delay_feed: 0.5, // [O;1] unitless
 
+    verb_wet: 0, // [0;1] unitless
+    verb_time: 4, // [0;10] sec
+
     dist_amt: 0, // [0;1] unitless
   },
   analyzer: {
