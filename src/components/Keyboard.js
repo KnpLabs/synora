@@ -42,7 +42,7 @@ export const Keyboard = () => {
         setActive(false)
         keyRelease(key)
       }}
-      onMouseEnter={() => active && keyPress(key)}
+      onMouseEnter={(event) => active && keyPress(key, event)}
       onMouseLeave={() => active && keyRelease(key)}>
       {isKeyActive(state.notes, key) && Tone.Midi(key).toNote()}
     </Key>

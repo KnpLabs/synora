@@ -49,24 +49,24 @@ export const Engine = ({ children }) => {
 
     filter.chain(delay, distortion, reverb, analyzer, volume, Tone.Destination)
 
-    Tone.start().then(() => {
-      engine = {
-        oscillator1,
-        oscillator2,
-        filter: {
-          unit: filter,
-          scale: filterFreqScale,
-          envelope: filterEnvelope,
-        },
-        volume,
-        distortion,
-        delay,
-        analyzer,
-        reverb
-      }
-            
-      dispatch({ type: 'init_engine' })
-    })
+    engine = {
+      oscillator1,
+      oscillator2,
+      filter: {
+        unit: filter,
+        scale: filterFreqScale,
+        envelope: filterEnvelope,
+      },
+      volume,
+      distortion,
+      delay,
+      analyzer,
+      reverb
+    }
+
+    dispatch({ type: 'init_engine' })
+
+    Tone.start()
   }, [])
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export const Engine = ({ children }) => {
     }
 
     const toPlays = state.notes.filter(note => note.isPlaying && !note.triggered)
-   
+
     const toRelease = state.notes.filter(note => !note.isPlaying)
 
     const parseFrequencies = (notes) => notes.map(({ note }) => Tone.Midi(note).toFrequency())
