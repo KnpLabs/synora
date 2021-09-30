@@ -4,6 +4,12 @@ import { map } from 'ramda'
 import { SynthInstrumentContext } from './Engine'
 import styled from 'styled-components'
 
+const STATUSBYTE_NOTEOFF = 0x8;
+const STATUSBYTE_NOTEON = 0x9;
+const STATUSBYTE_CONTROLCHANGE = 0xA;
+
+const isMessageStatus = (type, status) => Math.floor(type / 0x10) === status
+
 export const SynthController = ({ displayControls = true }) => {
   const [state, dispatch] = useContext(SynthInstrumentContext)
 
@@ -14,8 +20,8 @@ export const SynthController = ({ displayControls = true }) => {
 
     navigator
       .requestMIDIAccess()
-      .then((midiAcess) => {
-        const inputs = midiAcess.inputs
+      .then((midiAccess) => {
+        const inputs = midiAccess.inputs
 
         inputs.forEach(input => {
           input.onmidimessage = (message) => {
@@ -25,13 +31,13 @@ export const SynthController = ({ displayControls = true }) => {
 
             const [type, note] = message.data
 
-            switch (type) {
-              case 159:
-                dispatch({ type: 'note_pressed', note: note })
+            switch (true) {
+              case isMessageStatus(type, STATUSBYTE_NOTEON):
+                dispatch({ type: 'note_pressed', note })
                 break
 
-              case 143:
-                dispatch({ type: 'note_released', note: note })
+              case isMessageStatus(type, STATUSBYTE_NOTEOFF):
+                dispatch({ type: 'note_released', note })
                 break
 
               default:
