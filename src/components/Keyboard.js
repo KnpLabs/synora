@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { range, map, find } from 'ramda'
 import * as Tone from 'tone'
 import { SynthInstrumentContext } from './Engine'
 import styled from 'styled-components'
@@ -9,23 +8,35 @@ export const Keyboard = () => {
   const [active, setActive] = useState(false)
 
   const isKeyActive = (notes, key) => {
-    const note = find(({ note }) => note === key, notes)
+    const note = notes.find(({ note }) => note === key, notes)
 
     return note && note.isPlaying
   }
 
-  const keyPress = key => dispatch({ type: 'note_pressed', note: key })
+  const getVelocity = (event) => {
+    const rect = event.target.getBoundingClientRect()
+    const x = event.clientY - rect.top
+    return (x / 128)
+  }
+
+  const keyPress = (key, event) => dispatch({
+    type: 'note_pressed',
+    note: key,
+    velocity: getVelocity(event)
+  })
 
   const keyRelease = key => dispatch({ type: 'note_released', note: key })
 
-  const keys = map(
+  const range = (start, stop, step) => Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + (i * step));
+
+  const keys = range(36, 89, 1).map(
     (key) => <Key
       key={key}
       sharp={Tone.Midi(key).toNote().includes('#')}
       active={isKeyActive(state.notes, key)}
-      onMouseDown={() => {
+      onMouseDown={(event) => {
         setActive(true)
-        keyPress(key)
+        keyPress(key, event)
       }}
       onMouseUp={() => {
         setActive(false)
@@ -34,8 +45,7 @@ export const Keyboard = () => {
       onMouseEnter={() => active && keyPress(key)}
       onMouseLeave={() => active && keyRelease(key)}>
       {isKeyActive(state.notes, key) && Tone.Midi(key).toNote()}
-    </Key>,
-    range(36, 89)
+    </Key>
   )
 
   return (

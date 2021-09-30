@@ -1,6 +1,5 @@
 import * as Tone from 'tone'
 import React, { useContext, useEffect } from 'react'
-import { map } from 'ramda'
 import { SynthInstrumentContext } from './Engine'
 import styled from 'styled-components'
 
@@ -25,15 +24,16 @@ export const SynthController = ({ displayControls = true }) => {
 
         inputs.forEach(input => {
           input.onmidimessage = (message) => {
+            
             if (!message.data) {
               return
             }
 
-            const [type, note] = message.data
+            const [type, note, velocity] = message.data
 
             switch (true) {
               case isMessageStatus(type, STATUSBYTE_NOTEON):
-                dispatch({ type: 'note_pressed', note })
+                dispatch({ type: 'note_pressed', note, velocity: velocity / 128 })
                 break
 
               case isMessageStatus(type, STATUSBYTE_NOTEOFF):
@@ -54,9 +54,9 @@ export const SynthController = ({ displayControls = true }) => {
     : (
       <Info>
         Played notes :
-        {map(({ note, isPlaying }) =>
+        {state.notes.map(({ note, isPlaying }) =>
           isPlaying && <span key={note}> {Tone.Midi(note).toNote()}</span>
-        )(state.notes)}
+        )}
       </Info>
     )
 }
