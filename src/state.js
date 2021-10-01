@@ -5,6 +5,7 @@ export const FLT_FREQ_MAX = 16000
 export const initialState = {
   notes: [],
   initialized: false,
+  midiSignal: false,
   parameters: {
     master_vol: 0.7, // [0;1] gain
 
@@ -110,6 +111,9 @@ export const reducer = (state = initialState, action) => {
           [action.name]: action.value,
         }
       }
+    
+    case 'midi_signal':
+      return { ...state, midiSignal: action.status }
 
     default:
       return state
