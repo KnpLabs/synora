@@ -10,37 +10,39 @@ import { SynthController } from './components/SynthController'
 import { Keyboard } from './components/Keyboard'
 import { Delay } from './components/Delay'
 import { Distortion } from './components/Distortion'
+import { Analyzer } from './components/Analyzer'
+import { DeviceSelector } from './components/DeviceSelector'
 import styled, { ThemeProvider } from 'styled-components'
 import theme from './theme'
 import { Led } from './components/Led'
 
 const Synth = () =>
   <ThemeProvider theme={theme}>
-    <Instrument>
-      <Engine>
-        <Header>
-          <LeftHeader>
-            <Title>|| Syñora</Title>
-            <Led></Led>
-          </LeftHeader>
-          <PresetManager />
-          {/*<Analyzer/>*/}
-          <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
-        </Header>
-        <Rack>
-          <Oscillator number="1"/>
-          <Oscillator number="2"/>
-          <Filter/>
-        </Rack>
-        <Rack>
-          <Delay/>
-          <Distortion/>
-          <Reverb/>
-        </Rack>
-        <Keyboard/>
-        <SynthController/>
-      </Engine>
-    </Instrument>
+  <Instrument>
+    <Engine>
+      <Header>
+        <LeftHeader>
+          <Title>|| Syñora</Title>
+          <Led></Led>
+          <DeviceSelector />
+        </LeftHeader>
+        {/*<Analyzer/>*/}
+        <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
+      </Header>
+      <Rack>
+        <Oscillator number="1"/>
+        <Oscillator number="2"/>
+        <Filter/>
+      </Rack>
+      <Rack>
+        <Delay/>
+        <Distortion/>
+        <Reverb/>
+      </Rack>
+      <Keyboard/>
+      <SynthController/>
+    </Engine>
+  </Instrument>
   </ThemeProvider>
 
 const Instrument = styled.div`
