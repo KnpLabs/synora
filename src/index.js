@@ -4,6 +4,7 @@ import { Engine } from './components/Engine'
 import { Filter } from './components/Filter'
 import { Oscillator } from './components/Oscillator'
 import { ParamKnob } from './components/ParamKnob'
+import { PresetManager } from './components/PresetManager'
 import { Reverb } from './components/Reverb'
 import { SynthController } from './components/SynthController'
 import { Keyboard } from './components/Keyboard'
@@ -22,6 +23,7 @@ const Synth = () =>
             <Title>|| Syñora</Title>
             <Led></Led>
           </LeftHeader>
+          <PresetManager />
           {/*<Analyzer/>*/}
           <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
         </Header>

@@ -10,7 +10,7 @@ export const initialState = {
     master_vol: 0.7, // [0;1] gain
 
     osc1_type: 'sine', // {sine,square,triangle,sawtooth}
-    osc1_vol: 1, // [0;1] gain
+    osc1_vol: 0.75, // [0;1] gain
     osc1_phase: 0, // [0;360] degress
     osc1_pitch: 0, // [-24;24] semitones
     osc1_detune: 0, // [-100;100] cents
@@ -80,7 +80,7 @@ export const reducer = (state = initialState, action) => {
             ))
             : [ ...state.notes, { note: action.note, isPlaying: true, triggered: false, velocity: action.velocity }]
       }
-    
+
     case 'note_triggered':
       return {
         ...state,
@@ -114,6 +114,12 @@ export const reducer = (state = initialState, action) => {
     
     case 'midi_signal':
       return { ...state, midiSignal: action.status }
+
+    case 'load_preset':
+      return {
+        ...state,
+        parameters: action.parameters
+      }
 
     default:
       return state

@@ -44,10 +44,10 @@ export const Engine = ({ children }) => {
 
     filterEnvelope.connect(filterFreqScale)
     filterFreqScale.connect(filter.frequency)
-    oscillator1.connect(filter)
-    oscillator2.connect(filter)
+    oscillator1.connect(delay)
+    oscillator2.connect(delay)
 
-    filter.chain(delay, distortion, reverb, analyzer, volume, Tone.Destination)
+    delay.chain(distortion, reverb, filter, analyzer, volume, Tone.Destination)
 
     engine = {
       oscillator1,
