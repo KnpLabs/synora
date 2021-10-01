@@ -9,16 +9,19 @@ import { SynthController } from './components/SynthController'
 import { Keyboard } from './components/Keyboard'
 import { Delay } from './components/Delay'
 import { Distortion } from './components/Distortion'
-import { Analyzer } from './components/Analyzer'
 import styled, { ThemeProvider } from 'styled-components'
 import theme from './theme'
+import { Led } from './components/Led'
 
 const Synth = () =>
   <ThemeProvider theme={theme}>
     <Instrument>
       <Engine>
         <Header>
-          <Title>|| Syñora</Title>
+          <LeftHeader>
+            <Title>|| Syñora</Title>
+            <Led></Led>
+          </LeftHeader>
           {/*<Analyzer/>*/}
           <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
         </Header>
@@ -51,11 +54,11 @@ const Instrument = styled.div`
 `
 
 const Header = styled.header`
+  display: flex;
   margin: -1rem -1rem 2rem -1rem;
   padding: 1rem;
   background-color: ${props => props.theme.colors.header};
   box-shadow: 0 8px 8px ${props => props.theme.colors.shadows.lightBlack}, inset 0 8px 16px ${props => props.theme.colors.shadows.lightWhite};
-  display: flex;
   justify-content: space-between;
 
   > * {
@@ -64,7 +67,6 @@ const Header = styled.header`
 `
 
 const Title = styled.h1`
-  flex: 1;
   margin: auto 0;
   text-shadow: 0 0 4px ${props => props.theme.colors.shadows.text}, inset 0 0 4px red;
   text-transform: uppercase;
@@ -96,6 +98,17 @@ const Rack = styled.div`
     }
   }
 `
+
+const LeftHeader = styled.div`
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  ${Title} {
+    margin-right: 10px;
+  }
+`
+
 
 const root = document.getElementById('root')
 

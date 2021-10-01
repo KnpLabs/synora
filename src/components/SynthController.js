@@ -24,7 +24,12 @@ export const SynthController = ({ displayControls = true }) => {
 
         inputs.forEach(input => {
           input.onmidimessage = (message) => {
+            dispatch({ type: 'midi_signal', status: true })
             
+            setTimeout(() => {
+              dispatch({ type: 'midi_signal', status: false })
+            }, 50);
+
             if (!message.data) {
               return
             }
