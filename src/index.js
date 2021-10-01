@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Engine } from './components/Engine'
 import { Filter } from './components/Filter'
+import { FrequencyShifter } from './components/FrequencyShifter'
 import { Oscillator } from './components/Oscillator'
 import { ParamKnob } from './components/ParamKnob'
 import { PresetManager } from './components/PresetManager'
@@ -26,19 +27,21 @@ const Synth = () =>
           <Led></Led>
           <DeviceSelector />
         </LeftHeader>
-        {/*<Analyzer/>*/}
-        <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
-      </Header>
-      <Rack>
-        <Oscillator number="1"/>
-        <Oscillator number="2"/>
-        <Filter/>
-      </Rack>
-      <Rack>
-        <Delay/>
-        <Distortion/>
-        <Reverb/>
-      </Rack>
+          <PresetManager />
+          {/*<Analyzer/>*/}
+          <ParamKnob paramName={'master_vol'} factor="100" min="0" max="100"/>
+        </Header>
+        <Rack>
+          <Oscillator number="1"/>
+          <Oscillator number="2"/>
+          <Filter/>
+        </Rack>
+        <Rack>
+          <Delay/>
+          <Distortion/>
+          <Reverb/>
+          <FrequencyShifter />
+        </Rack>
       <Keyboard/>
       <SynthController/>
     </Engine>

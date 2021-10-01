@@ -45,6 +45,9 @@ export const initialState = {
     verb_wet: 0, // [0;1] unitless
     verb_time: 4, // [0;10] sec
 
+    shft_wet: 0, // [0;1] unitless
+    shft_freq: 0, // [-500;500] Hz
+
     dist_amt: 0, // [0;1] unitless
   },
   analyzer: {

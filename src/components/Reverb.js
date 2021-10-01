@@ -13,7 +13,7 @@ export const Reverb = () => (
 )
 
 const ReverbEffect = styled.div`
-  flex: 1!important;
+  flex: 2!important;
 
   > div {
     display: flex;

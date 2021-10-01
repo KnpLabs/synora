@@ -15,6 +15,7 @@ let engine = {
   delay: null,
   analyzer: null,
   reverb: null,
+  shifter: null,
 }
 
 export const SynthInstrumentContext = createContext([initialState, () => null])
@@ -35,6 +36,7 @@ export const Engine = ({ children }) => {
     const delay = new Tone.FeedbackDelay(defaults.delay_time, defaults.delay_feed)
     const volume = new Tone.Volume(defaults.master_vol)
     const reverb = new Tone.Reverb(defaults.verb_time)
+    const shifter = new Tone.FrequencyShifter(defaults.shft_freq)
     const analyzer = new Tone.Analyser('fft', 128)
 
     oscillator1.set({ 'oscillator': { 'type': defaults.osc1_type } })
@@ -47,7 +49,7 @@ export const Engine = ({ children }) => {
     oscillator1.connect(delay)
     oscillator2.connect(delay)
 
-    delay.chain(distortion, reverb, filter, analyzer, volume, Tone.Destination)
+    delay.chain(distortion, reverb, filter, shifter, analyzer, volume, Tone.Destination)
 
     engine = {
       oscillator1,
@@ -61,6 +63,7 @@ export const Engine = ({ children }) => {
       distortion,
       delay,
       analyzer,
+      shifter,
       reverb
     }
 
@@ -250,6 +253,15 @@ export const Engine = ({ children }) => {
     engine.reverb.set({ 'wet': params.verb_wet })
     engine.reverb.set({ 'decay': params.verb_time })
   }, [params.verb_wet, params.verb_time, initialized])
+
+  useEffect(() => {
+    if (!initialized) {
+      return
+    }
+
+    engine.shifter.set({'wet': params.shft_wet})
+    engine.shifter.set({'frequency': params.shft_freq})
+  }, [params.shft_wet, params.shft_freq, initialized])
 
   return (
     <Rack>
