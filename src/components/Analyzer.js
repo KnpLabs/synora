@@ -5,20 +5,20 @@ import { SynthInstrumentContext } from './Engine'
 import styled from 'styled-components'
 import theme from '../theme'
 
-export const Analyzer = (props) => {
+export const Analyzer = () => {
   const [state, dispatch] = useContext(SynthInstrumentContext)
 
   const screen = React.useRef(null)
 
   useEffect(() => {
     const clock = new Tone.Clock(() => {
-        if (!state.initialized) {
-          return
-        }
+      if (!state.initialized) {
+        return
+      }
 
-        dispatch({ type: 'update_analyzer' })
-      },
-      30
+      dispatch({ type: 'update_analyzer' })
+    },
+    30
     )
 
     clock.start()
@@ -31,12 +31,12 @@ export const Analyzer = (props) => {
   if (screen.current) {
     const ctx = screen.current.getContext('2d')
     const dots = state.analyzer.values
-    const halfHeight = screen.current.height / 2;
+    const halfHeight = screen.current.height / 2
 
-    const a2h = (amplitude) => Math.max(0, amplitude + 70) / 35 * screen.current.height;
-    const i2w = (index) => (screen.current.width / dots.length) * index
+    const a2h = amplitude => Math.max(0, amplitude + 70) / 35 * screen.current.height
+    const i2w = index => (screen.current.width / dots.length) * index
 
-    ctx.lineWidth = Math.floor(screen.current.width / dots.length);
+    ctx.lineWidth = Math.floor(screen.current.width / dots.length)
     ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
 
     ctx.fillRect(0, 0, screen.current.width, screen.current.height)
@@ -51,7 +51,7 @@ export const Analyzer = (props) => {
 
   return (
     <Container>
-      <Screen ref={screen}/>
+      <Screen ref={ screen }/>
     </Container>
   )
 }

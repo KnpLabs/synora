@@ -4,15 +4,16 @@ import { Selector } from './ui/Selector'
 
 export const WaveshapeSelector = ({ oscillatorNumber, ...attrs }) => {
   const types = {
-    'sine': 'SIN',
-    'square': 'SQR',
-    'triangle': 'TRI',
-    'sawtooth': 'SAW',
+    sine: 'SIN',
+    square: 'SQR',
+    triangle: 'TRI',
+    sawtooth: 'SAW',
   }
 
-  return <StyledSelector {...attrs} paramName={`osc${oscillatorNumber}_type`} types={types} />
+  return <StyledSelector { ...attrs } paramName={ `osc${oscillatorNumber}_type` } types={ types } />
 }
 
+/* eslint-disable max-len */
 const StyledSelector = styled(Selector)`
   button {
     font-size: 0;
@@ -30,7 +31,7 @@ const StyledSelector = styled(Selector)`
 
     &.sine:before {
       transform: scaleY(-1);
-      background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDEwMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTg5LjIsNjAuOGMtNC41LDAtNi42LTUuMy04LjYtMTAuNGMtMS44LTQuNS0zLjYtOS4xLTYuOC05LjFzLTUsNC42LTYuOCw5LjFjLTIsNS4xLTQuMSwxMC40LTguNiwxMC40cy02LjYtNS4zLTguNi0xMC40ICAgYy0xLjgtNC41LTMuNi05LjEtNi44LTkuMXMtNSw0LjYtNi44LDkuMWMtMiw1LjEtNC4xLDEwLjQtOC42LDEwLjRjLTQuNSwwLTYuNi01LjMtOC42LTEwLjRjLTEuOC00LjUtMy42LTkuMS02LjgtOS4xICAgYy0wLjYsMC0xLTAuNC0xLTFzMC40LTEsMS0xYzQuNSwwLDYuNiw1LjMsOC42LDEwLjRjMS44LDQuNSwzLjYsOS4xLDYuOCw5LjFjMy4yLDAsNS00LjYsNi44LTkuMWMyLTUuMSw0LjEtMTAuNCw4LjYtMTAuNCAgIHM2LjYsNS4zLDguNiwxMC40YzEuOCw0LjUsMy42LDkuMSw2LjgsOS4xYzMuMiwwLDUtNC42LDYuOC05LjFjMi01LjEsNC4xLTEwLjQsOC42LTEwLjRzNi42LDUuMyw4LjYsMTAuNGMxLjgsNC41LDMuNiw5LjEsNi44LDkuMSAgIGMwLjYsMCwxLDAuNCwxLDFTODkuOCw2MC44LDg5LjIsNjAuOHoiPjwvcGF0aD48L2c+PC9zdmc+");
+      background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyAwIDAgMTAwIDEwMCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PGc+PHBhdGggZD0iTTg5LjIsNjAuOGMtNC41LDAtNi42LTUuMy04LjYtMTAuNGMtMS44LTQuNS0zLjYtOS4xLTYuOC05LjFzLTUsNC42LTYuOCw5LjFjLTIsNS4xLTQuMSwxMC40LTguNiwxMC40cy02LjYtNS4zLTguNi0xMC40ICAgYy0xLjgtNC41LTMuNi05LjEtNi44LTkuMXMtNSw0LjYtNi44LDkuMWMtMiw1LjEtNC4xLDEwLjQtOC42LDEwLjRjLTQuNSwwLTYuNi01LjMtOC42LTEwLjRjLTEuOC00LjUtMy42LTkuMS02LjgtOS4xICAgYy0wLjYsMC0xLTAuNC0xLTFzMC40LTEsMS0xYzQuNSwwLDYuNiw1LjMsOC42LDEwLjRjMS44LDQuNSwzLjYsOS4xLDYuOCw5LjFjMy4yLDAsNS00LjYsNi44LTkuMWMyLTUuMSw0LjEtMTAuNCw4LjYtMTAuNCAgIHM2LjYsNS4zLDguNiwxMC40YzEuOCw0LjUsMy42LDkuMSw2LjgsOS4xYzMuMiwwLDUtNC42LDYuOC05LjFjMi01LjEsNC4xLTEwLjQsOC42LTEwLjRzNi42LDUuMyw4LjYsMTAuNGMxLjgsNC41LDMuNiw5LjEsNi44LDkuMSAgIGMwLjYsMCwxLDAuNCwxLDFTODkuOCw2MC44LDg5LjIsNjAuOHoiPjwvcGF0aD48L2c+PC9zdmc+"); /* stylelint-disable-line max-len */
     }
     &.triangle:before {
       transform: scaleY(-1);

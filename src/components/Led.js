@@ -2,12 +2,11 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { SynthInstrumentContext } from './Engine'
 
-
 export const Led = () => {
   const [state] = useContext(SynthInstrumentContext)
 
   return (
-    <Light signal={state.midiSignal}>
+    <Light signal={ state.midiSignal }>
     </Light>
   )
 }

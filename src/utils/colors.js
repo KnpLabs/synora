@@ -1,7 +1,6 @@
-
 const hexcolorToArray = color => color
   .substring(1)
-  .match(new RegExp(`.{2}`, 'g'))
+  .match(new RegExp('.{2}', 'g'))
   .map(v => parseInt(v, 16))
 
 const arrayToHexcolor = array => array

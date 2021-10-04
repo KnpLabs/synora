@@ -4,9 +4,8 @@ import { SynthInstrumentContext } from './Engine'
 import styled from 'styled-components'
 import { getMIDIDevice } from '../state'
 
-const STATUSBYTE_NOTEOFF = 0x8;
-const STATUSBYTE_NOTEON = 0x9;
-const STATUSBYTE_CONTROLCHANGE = 0xA;
+const STATUSBYTE_NOTEOFF = 0x8
+const STATUSBYTE_NOTEON = 0x9
 
 const isMessageStatus = (type, status) => Math.floor(type / 0x10) === status
 
@@ -15,7 +14,7 @@ export const SynthController = ({ displayControls = true }) => {
   const device = getMIDIDevice(state)
 
   const midiDevicesHandler = useCallback(
-    (event) => {
+    event => {
       const type = event.port.state === 'connected' ? 'midi_device_connect' : 'midi_device_disconnect'
 
       if (state.midi.device === null) {
@@ -34,18 +33,18 @@ export const SynthController = ({ displayControls = true }) => {
 
     navigator
       .requestMIDIAccess()
-      .then((midiAccess) => {
+      .then(midiAccess => {
         midiAccess.onstatechange = midiDevicesHandler
 
         if (!device) {
           return
         }
 
-        device.onmidimessage = (message) => {
+        device.onmidimessage = message => {
           dispatch({ type: 'midi_signal', status: true })
           setTimeout(() => {
             dispatch({ type: 'midi_signal', status: false })
-          }, 50);
+          }, 50)
 
           if (!message.data || message.target.id !== device.id) {
             return
@@ -76,7 +75,7 @@ export const SynthController = ({ displayControls = true }) => {
       <Info>
         Played notes :
         {state.notes.map(({ note, isPlaying }) =>
-          isPlaying && <span key={note}> {Tone.Midi(note).toNote()}</span>
+          isPlaying && <span key={ note }> {Tone.Midi(note).toNote()}</span>
         )}
       </Info>
     )

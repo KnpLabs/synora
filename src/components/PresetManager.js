@@ -13,12 +13,12 @@ export const PresetManager = () => {
   const importParameters = () => {
     const token = prompt('Copy preset token here')
 
-    dispatch({type: 'load_preset', parameters: decodeToken(token)})
+    dispatch({ type: 'load_preset', parameters: decodeToken(token) })
   }
 
   return <Wrapper>
-    <Button onClick={importParameters} title="Load a preset token">&#10549;</Button>
-    <Button onClick={exportParameters} title="Save current settings as a preset token">&#10548;</Button>
+    <Button onClick={ importParameters } title="Load a preset token">&#10549;</Button>
+    <Button onClick={ exportParameters } title="Save current settings as a preset token">&#10548;</Button>
   </Wrapper>
 }
 
@@ -41,7 +41,8 @@ const Button = styled.button`
   font-weight: bold;
   padding: 0.3rem 0.4rem;
   border-radius: 4px;
-  box-shadow: inset 0 2px 2px ${props => props.theme.colors.shadows.lightWhite}, inset 0 -2px 2px ${props => props.theme.colors.shadows.lightBlack};
+  box-shadow: inset 0 2px 2px ${props => props.theme.colors.shadows.lightWhite},
+  inset 0 -2px 2px ${props => props.theme.colors.shadows.lightBlack};
 
   &:first-child {
     margin-bottom: 0.25rem;
@@ -53,6 +54,7 @@ const Button = styled.button`
   }
 
   &:active {
-    box-shadow: inset 0 2px 2px ${props => props.theme.colors.shadows.lightBlack}, inset 0 -2px 2px ${props => props.theme.colors.shadows.lightWhite};
+    box-shadow: inset 0 2px 2px ${props => props.theme.colors.shadows.lightBlack},
+    inset 0 -2px 2px ${props => props.theme.colors.shadows.lightWhite};
   }
 `

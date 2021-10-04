@@ -22,6 +22,7 @@ export const Knob = ({ label, min, max, value, onChange, step = null }) => {
       }
 
       document.addEventListener('mouseup', handleOutsideMouseup)
+
       return () => {
         document.removeEventListener('mouseup', handleOutsideMouseup)
       }
@@ -39,6 +40,7 @@ export const Knob = ({ label, min, max, value, onChange, step = null }) => {
       }
 
       document.addEventListener('mousemove', handleOutsideMousemove)
+
       return () => {
         document.removeEventListener('mousemove', handleOutsideMousemove)
       }
@@ -54,14 +56,14 @@ export const Knob = ({ label, min, max, value, onChange, step = null }) => {
 
   return (
     <KnobWrapper
-      active={active}
-      onMouseDown={click}
-      cursorRotation={angle}
-      maskPolygonPoints={angleToMaskPolygonPoints(angle)}
-      withLabel={!!label}
+      active={ active }
+      onMouseDown={ click }
+      cursorRotation={ angle }
+      maskPolygonPoints={ angleToMaskPolygonPoints(angle) }
+      withLabel={ !!label }
     >
-      <KnobControl id={id} type="number" min={min} max={max} value={Math.round(value)} readOnly/>
-      {label && <KnobLabel id={id} data-min={min} data-max={max}>{label}</KnobLabel>}
+      <KnobControl id={ id } type="number" min={ min } max={ max } value={ Math.round(value) } readOnly/>
+      {label && <KnobLabel id={ id } data-min={ min } data-max={ max }>{label}</KnobLabel>}
     </KnobWrapper>
   )
 }
@@ -72,21 +74,22 @@ const angleToMaskPolygonPoints = angle => {
   let points = [
     '50% 50%',
     '0% 100%',
-  ];
+  ]
 
   if (angle <= 90) {
-    points.push(`0% ${(90 - angle) / 9 * 10}%`);
+    points.push(`0% ${(90 - angle) / 9 * 10}%`)
   } else {
-    points.push('0% 0%');
+    points.push('0% 0%')
 
     if (angle <= 180) {
-      points.push(`${(angle - 90) / 9 * 10}% 0%`);
+      points.push(`${(angle - 90) / 9 * 10}% 0%`)
     } else {
-      points.push('100% 0%');
+      points.push('100% 0%')
 
-      points.push(`100% ${(angle - 180) / 9 * 10}%`);
+      points.push(`100% ${(angle - 180) / 9 * 10}%`)
     }
   }
+
   return points.join(', ')
 }
 
@@ -176,7 +179,8 @@ const KnobControl = styled.input`
   outline: none;
   user-select: none;
   pointer-events: none;
-  box-shadow: inset 0 2px 2px ${props => props.theme.colors.shadows.lightWhite}, inset 0 -2px 2px ${props => props.theme.colors.shadows.lightBlack};
+  box-shadow: inset 0 2px 2px ${props => props.theme.colors.shadows.lightWhite},
+  inset 0 -2px 2px ${props => props.theme.colors.shadows.lightBlack};
 
   ${KnobWrapper}:hover & {
     background-color: ${props => props.theme.colors.shadows.lightWhite};

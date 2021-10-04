@@ -14,7 +14,7 @@ export default {
     text: '#dae5ff',
 
     borders: {
-      dark: '#000000'
+      dark: '#000000',
     },
 
     shadows: {
@@ -26,6 +26,6 @@ export default {
     keys: {
       white: '#ffffff',
       black: '#000000',
-    }
+    },
   },
 }

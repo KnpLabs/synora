@@ -6,14 +6,14 @@ import { SynthInstrumentContext } from '../Engine'
 export const Selector = ({ paramName, types, ...attrs }) => {
   const [state, dispatch] = useContext(SynthInstrumentContext)
 
-  return <StyledSelector {...attrs}>
+  return <StyledSelector { ...attrs }>
     {Object.keys(types).map(type =>
       <Type
-        key={type}
-        className={[type, type === getParam(state, paramName) && 'selected'].join(' ')}
-        value={type}
-        label={types[type]}
-        onSelect={val => setParam(dispatch, paramName, val)}
+        key={ type }
+        className={ [type, type === getParam(state, paramName) && 'selected'].join(' ') }
+        value={ type }
+        label={ types[type] }
+        onSelect={ val => setParam(dispatch, paramName, val) }
       />
     )}
   </StyledSelector>
@@ -21,9 +21,9 @@ export const Selector = ({ paramName, types, ...attrs }) => {
 
 const Type = ({ value, label, onSelect, ...attrs }) => {
   return <StyledType
-    {...attrs}
-    onClick={() => onSelect(value)}
-    title={label}>
+    { ...attrs }
+    onClick={ () => onSelect(value) }
+    title={ label }>
     {label}
   </StyledType>
 }
@@ -42,7 +42,10 @@ const StyledType = styled.button`
   background-color: transparent;
 
   &.selected {
-    background: linear-gradient(90deg, ${props => props.theme.colors.accent2} 0%, ${props => props.theme.colors.accent3} 100%);
+    background: linear-gradient(
+      90deg,
+      ${props => props.theme.colors.accent2} 0%,
+      ${props => props.theme.colors.accent3} 100%);
   }
 
   :hover:not(.selected) {

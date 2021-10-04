@@ -1,0 +1,70 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "rules": {
+      "arrow-parens": ["error", "as-needed"],
+      "comma-dangle": ["error", {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never"
+      }],
+      "comma-spacing": ["error", { "before": false, "after": true }],
+      "eqeqeq": ["error"],
+      "indent": ["error", 2, {
+        "ignoredNodes": ["TemplateLiteral"],
+        "SwitchCase": 1
+      }],
+      "keyword-spacing": ["error"],
+      "linebreak-style": ["error", "unix"],
+      "max-len": ["error", 120],
+      "no-tabs": ["error"],
+      "object-curly-spacing": ["error", "always"],
+      "quotes": ["error", "single"],
+      "quote-props": ["error", "as-needed"],
+      "react/jsx-curly-spacing": ["error", { "when": "always" }],
+      "react/prop-types": 0,
+      "semi": ["error", "never"],
+      "padding-line-between-statements": [
+        "error",
+        { "blankLine": "always", "prev": "*", "next": "function" },
+        { "blankLine": "always", "prev": "*", "next": "try" },
+        { "blankLine": "always", "prev": "*", "next": "switch" },
+        { "blankLine": "always", "prev": "*", "next": "throw" },
+        { "blankLine": "always", "prev": "*", "next": "return" }
+      ],
+      "no-duplicate-imports": ["error"],
+      "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0, "maxBOF": 0 }],
+      "eol-last": ["error", "always"],
+      "no-unused-vars": [
+        "error",
+        {
+          "vars": "all",
+          "args": "after-used",
+          "ignoreRestSiblings": true,
+          "argsIgnorePattern": "^_"
+        }
+      ]
+    }
+}

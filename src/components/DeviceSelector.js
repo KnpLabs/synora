@@ -10,13 +10,13 @@ export const DeviceSelector = () => {
 
   const onDeviceChange = useCallback(
     event => {
-      const device = state.midi.devices.find(device => device.id.toString() === event.target.value.toString());
+      const device = state.midi.devices.find(device => device.id.toString() === event.target.value.toString())
 
-    if (!device) {
-      return
-    }
+      if (!device) {
+        return
+      }
 
-    dispatch({ type: 'midi_switch_device', device })
+      dispatch({ type: 'midi_switch_device', device })
     },
     [state.midi.devices, dispatch]
   )
@@ -25,20 +25,20 @@ export const DeviceSelector = () => {
     setDevicesValues(
       devices
         .filter(device => device.state === 'connected')
-        .map(device => ({label: device.name, value: device.id}) )
+        .map(device => ({ label: device.name, value: device.id }) )
     )
   }, [devices])
 
   return (
     <Container>
-      <StyledSelector onChange={onDeviceChange}>
+      <StyledSelector onChange={ onDeviceChange }>
         <option defaultValue disabled>Choose one MIDI device</option>
         {devicesValues.map(deviceValue =>
-          <option key={deviceValue.value} value={deviceValue.value}>{deviceValue.label}</option>
+          <option key={ deviceValue.value } value={ deviceValue.value }>{deviceValue.label}</option>
         )}
       </StyledSelector>
     </Container>
-  );
+  )
 }
 
 const Container = styled.div`

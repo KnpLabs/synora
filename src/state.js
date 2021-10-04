@@ -1,4 +1,3 @@
-
 export const FLT_FREQ_MIN = 20
 export const FLT_FREQ_MAX = 16000
 
@@ -56,8 +55,8 @@ export const initialState = {
   },
   midi: {
     device: null,
-    devices: []
-  }
+    devices: [],
+  },
 }
 
 export const reducer = (state = initialState, action) => {
@@ -76,8 +75,8 @@ export const reducer = (state = initialState, action) => {
           ...state.midi,
           devices: state.midi.devices.find(device => device.id.toString() === action.device.id.toString()) !== undefined
             ? state.midi.devices
-            : [...state.midi.devices, action.device]
-        }
+            : [...state.midi.devices, action.device],
+        },
       }
 
     case 'midi_device_disconnect':
@@ -85,8 +84,8 @@ export const reducer = (state = initialState, action) => {
         ...state,
         midi: {
           ...state.midi,
-          devices: state.midi.devices.filter(device => device.id !== action.device.id)
-        }
+          devices: state.midi.devices.filter(device => device.id !== action.device.id),
+        },
       }
 
     case 'midi_switch_device':
@@ -94,12 +93,12 @@ export const reducer = (state = initialState, action) => {
         ...state,
         midi: {
           ...state.midi,
-          device: action.device
-        }
+          device: action.device,
+        },
       }
 
     case 'update_analyzer':
-      return { ...state, analyzer: { ...state.analyzer, requesting: true }}
+      return { ...state, analyzer: { ...state.analyzer, requesting: true } }
 
     case 'set_analyzer':
       return { ...state, analyzer: { requesting: false, values: action.values } }
@@ -114,7 +113,7 @@ export const reducer = (state = initialState, action) => {
                 ? { ...n, isPlaying: true, triggered: false, velocity: action.velocity }
                 : n
             ))
-            : [ ...state.notes, { note: action.note, isPlaying: true, triggered: false, velocity: action.velocity }]
+            : [ ...state.notes, { note: action.note, isPlaying: true, triggered: false, velocity: action.velocity }],
       }
 
     case 'note_triggered':
@@ -125,7 +124,7 @@ export const reducer = (state = initialState, action) => {
             n.note === action.note
               ? { ...n, triggered: true }
               : n
-          ))
+          )),
       }
 
     case 'note_released':
@@ -136,7 +135,7 @@ export const reducer = (state = initialState, action) => {
             n.note === action.note
               ? { ...n, isPlaying: false, triggered: false }
               : n
-          ))
+          )),
       }
 
     case 'set_parameter':
@@ -145,7 +144,7 @@ export const reducer = (state = initialState, action) => {
         parameters: {
           ...state.parameters,
           [action.name]: action.value,
-        }
+        },
       }
 
     case 'midi_signal':
@@ -154,7 +153,7 @@ export const reducer = (state = initialState, action) => {
     case 'load_preset':
       return {
         ...state,
-        parameters: action.parameters
+        parameters: action.parameters,
       }
 
     default:
@@ -165,8 +164,8 @@ export const reducer = (state = initialState, action) => {
 /* Selectors */
 export const getParams = state => state.parameters
 export const getParam = (state, name) => getParams(state)[name] || null
-export const getMIDIDevices = (state) => state.midi.devices
-export const getMIDIDevice = (state) => state.midi.device
+export const getMIDIDevices = state => state.midi.devices
+export const getMIDIDevice = state => state.midi.device
 
 /* Dispatch helpers */
 export const setParam = (dispatch, name, value) => dispatch({ type: 'set_parameter', name, value })
